@@ -50,15 +50,15 @@
                         <form novalidate @submit.stop.prevent="submit">
                             <md-input-container>
                                 <label>Nome</label>
-                                <md-input type="text" v-model="newUser.nome"></md-input>
+                                <md-input type="text" v-model="nome"></md-input>
                             </md-input-container>
                             <md-input-container>
                                 <label>Usuario</label>
-                                <md-input type="text" v-model="newUser.user"></md-input>
+                                <md-input type="text" v-model="user"></md-input>
                             </md-input-container>
                             <md-input-container>
                                 <label>Email</label>
-                                <md-input type="text" v-model="newUser.email"></md-input>
+                                <md-input type="text" v-model="email"></md-input>
                             </md-input-container>
                         </form>
                     </div>
@@ -125,95 +125,149 @@
 
 <script>
 
-    export default {
-        name: 'clientes',
-        data () {
-            return {
-            showingAddModal: false,
-            showingEditModal: false,
-            showingDeletModal: false,
-            errorMessage: "",
-            successMessage: "",
-            newUser: { nome: "", email: "", user: "" },
-            modalUser: {},
-            users: []
+export default {
+    //name: '#user',
+    data () {
+        return {
+        showingAddModal: false,
+        showingEditModal: false,
+        showingDeletModal: false,
+        errorMessage: "",
+        successMessage: "",
+        id: '', nome: "", email: "", user: "", dataCad: '', type: '',
+        modalUser: {},
+        users: []
+        }
+    },
+    mounted: function(){
+        console.log("bonina");
+        this.getAllUsers();
+    },
+    methods: {
+        getAllUsers: function(){
+            this.$http.get('http://localhost/codephp/skyhubnovo/api/apiphp.php?action=read')
+            .then((response) => {
+                if(response.data.error){
+                    this.errorMessage = response.data.message;
+                } else{
+                    this.users = response.data.users;
+                }
+            });
+        },
+        saveUser: function(){
+            const data = {
+                'type': 'user',
+                'nome': this.nome,
+                'email': this.email,
+                'user': this.user,
+                'dataCad': new Date().toJSON()
             }
+            this.$store.store.create(data).then(results => {
+                this.$store.store.recaregarUsers(this, 'users')
+            })
+            this.nome = ''
+            this.email = ''
+            this.user = ''
+
+            /*var formData = this.toFormData(this.newUser);
+            axios.post("http://localhost/codephp/skyhubnovo/api/apiphp.php?action=create", formData)
+            .then((response) => {
+                this.newUser = { nome: "", email: "", user: "" };
+                if(response.data.error){
+                    this.errorMessage = response.data.message;
+                } else{
+                    this.successMessage = response.data.message;
+                    this.getAllUsers();
+                }
+            });*/
         },
-        mounted: function(){
-            console.log("bonina");
-            this.getAllUsers();
+        updateUser: function(){
+            var formData = this.toFormData(this.modalUser);
+            axios.post("http://localhost/codephp/skyhubnovo/api/apiphp.php?action=update", formData)
+            .then((response) => {
+                this.modalUser = {};
+                if(response.data.error){
+                    this.errorMessage = response.data.message;
+                } else{
+                    this.successMessage = response.data.message;
+                    this.getAllUsers();
+                }
+            });
         },
-        methods: {
-            getAllUsers: function(){
-                this.$http.get('http://localhost/codephp/skyhubnovo/api/apiphp.php?action=read')
-                .then((response) => {
-                    if(response.data.error){
-                        this.errorMessage = response.data.message;
-                    } else{
-                        this.users = response.data.users;
-                    }
-                });
-            },
-            saveUser: function(){
-                var formData = this.toFormData(this.newUser);
-                axios.post("http://localhost/codephp/skyhubnovo/api/apiphp.php?action=create", formData)
-                .then((response) => {
-                    this.newUser = { nome: "", email: "", user: "" };
-                    if(response.data.error){
-                        this.errorMessage = response.data.message;
-                    } else{
-                        this.successMessage = response.data.message;
-                        this.getAllUsers();
-                    }
-                });
-            },
-            updateUser: function(){
-                var formData = this.toFormData(this.modalUser);
-                axios.post("http://localhost/codephp/skyhubnovo/api/apiphp.php?action=update", formData)
-                .then((response) => {
-                    this.modalUser = {};
-                    if(response.data.error){
-                        this.errorMessage = response.data.message;
-                    } else{
-                        this.successMessage = response.data.message;
-                        this.getAllUsers();
-                    }
-                });
-            },
-            deleteUser: function(){
-                var formData = this.toFormData(this.modalUser);
-                axios.post("http://localhost/codephp/skyhubnovo/api/apiphp.php?action=delete", formData)
-                .then((response) => {
-                    this.modalUser = {};
-                    if(response.data.error){
-                        this.errorMessage = response.data.message;
-                    } else{
-                        this.successMessage = response.data.message;
-                        this.getAllUsers();
-                    }
-                });
-            },
-            selecUser: function(user){
-                this.modalUser = user;
-            },
-            toFormData: function(obj){
-                var form_data = new FormData();
-                    for ( var key in obj ){
-                        form_data.append(key, obj[key]);
-                    }
-                    return form_data;
-            },
-            clearMassege: function(){
-                this.errorMessage = "";
-                this.successMessage = "";
-            }
+        deleteUser: function(){
+            var formData = this.toFormData(this.modalUser);
+            axios.post("http://localhost/codephp/skyhubnovo/api/apiphp.php?action=delete", formData)
+            .then((response) => {
+                this.modalUser = {};
+                if(response.data.error){
+                    this.errorMessage = response.data.message;
+                } else{
+                    this.successMessage = response.data.message;
+                    this.getAllUsers();
+                }
+            });
         },
-    }
+        selecUser: function(user){
+            this.modalUser = user;
+        },
+        toFormData: function(obj){
+            var form_data = new FormData();
+                for ( var key in obj ){
+                    form_data.append(key, obj[key]);
+                }
+                return form_data;
+        },
+        clearMassege: function(){
+            this.errorMessage = "";
+            this.successMessage = "";
+        }
+    },
+}
 
 
 </script>
 
 <style scoped>
+.modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.modalContainer{
+    width: 555px;
+    background: #FFFFFF;
+    margin: auto;
+    margin-top: 44px;
+}
+
+.modalHeading{
+    padding: 9px;
+    background: #06307c;
+    color: #FFFFFF;
+}
+
+.modalContent{
+    min-height: 333px;
+    padding: 44px;
+}
+p.successMessage{
+    background: #D8EFC2;
+    color: #097133;
+    border-left: 5px solid #097133;
+    padding: 9px;
+    margin: 22px 0;
+}
+p.errorMessage{
+    background: #EFCBC2;
+    color: #D71517;
+    border-left: 5px solid #DA1527;
+    padding: 9px;
+    margin: 22px 0;
+}
 
 
 </style>
