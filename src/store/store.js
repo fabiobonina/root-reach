@@ -8,22 +8,24 @@ const remotedb = new PouchDB('http://localhost:5984/vuedb')
 
 Vue.use(Vuex)
 
-const store = {}
-
 const state = {
-    currentUser: null,
-    currentChannel: null,
-    isPrivate: false,
-    memos: {}
+
 }
 
 PouchDB.debug.disable()
 
-store.create = data => {
+state.create = data => {
   return db.post(data)
 }
 
-store.findUsers = () => {
+state.update = data => {
+  return db.post(data)
+}
+state.delete = data => {
+  return db.remove(data)
+}
+
+state.findUsers = () => {
   function map (doc, emit) {
     if (doc.type === 'user') {
       emit(doc.createdAt)
@@ -34,8 +36,8 @@ store.findUsers = () => {
   )
 }
 
-store.recaregarUsers = (obj, prop) => {
-  store.findUsers().then(users => {
+state.recaregarUsers = (obj, prop) => {
+  state.findUsers().then(users => {
     obj[prop] = _.map(users, (user) => user)
   })
   if (remotedb) {
@@ -74,7 +76,6 @@ const getters = {
 }
 
 export default new Vuex.Store({
-    store,
     state,
     mutations,
     actions,
