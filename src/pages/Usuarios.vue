@@ -134,9 +134,9 @@ export default {
         showingAddModal: false,
         showingEditModal: false,
         showingDeletModal: false,
-        errorMessage: "",
-        successMessage: "",
-        id: '', nome: "", email: "", user: "", dataCad: '', type: '',
+        errorMessage: '',
+        successMessage: '',
+        nome: '', email: '', user: '', dataCad: '', type: '',
         modalUser: {},
         users: []
         }
@@ -189,8 +189,8 @@ export default {
                 return form_data;
         },
         clearMassege: function(){
-            this.errorMessage = "";
-            this.successMessage = "";
+            this.errorMessage = '';
+            this.successMessage = '';
         }
     },
 }

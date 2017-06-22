@@ -28,6 +28,7 @@
                         <md-table-cell>{{ cliente.fantasia }}</md-table-cell>
                         <md-table-cell>{{ cliente.nome }}</md-table-cell>
                         <md-table-cell>{{ cliente.seguimento }}</md-table-cell>
+                        <a class="btn btn-default" :href="'#/cliente/' + cliente._id">View</a>
                         <md-button class="md-icon-button md-raised md-primary" @click.native="showEditModal = true; selecItem(cliente)"><md-icon>edit</md-icon></md-button>
                         <md-button class="md-icon-button md-raised md-accent" @click.native="showDeletModal = true; selecItem(cliente)"><md-icon>delete</md-icon></md-button>
                     </md-table-row>
@@ -47,23 +48,23 @@
                     <div class="modalContent">
                         <form novalidate @submit.stop.prevent="submit">
                             <md-input-container>
+                                <label>Fantasia</label>
+                                <md-input type="text" v-model="fantasia"></md-input>
+                            </md-input-container>
+                            <md-input-container>
                                 <label>Nome</label>
                                 <md-input type="text" v-model="nome"></md-input>
                             </md-input-container>
                             <md-input-container>
-                                <label>Usuario</label>
-                                <md-input type="text" v-model="user"></md-input>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Email</label>
-                                <md-input type="text" v-model="email"></md-input>
+                                <label>Seguimento</label>
+                                <md-input type="text" v-model="seguimento"></md-input>
                             </md-input-container>
                         </form>
                     </div>
                     <div>
                         <md-bottom-bar md-theme="teal">
                             <md-bottom-bar-item md-icon="cancel" @click.native="showAddModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="save" @click.native="showAddModal = false; saveUser()">Salva</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="save" @click.native="showAddModal = false; saveItem()">Salva</md-bottom-bar-item>
                         </md-bottom-bar>
                     </div>
                 </div>
@@ -78,23 +79,23 @@
                     <div class="modalContent">
                         <form novalidate @submit.stop.prevent="submit">
                             <md-input-container>
+                                <label>Nome Fantasia</label>
+                                <md-input type="text" v-model="modalItem.fantasia"></md-input>
+                            </md-input-container>
+                            <md-input-container>
                                 <label>Nome</label>
-                                <md-input type="text" v-model="modalUser.nome"></md-input>
+                                <md-input type="text" v-model="modalItem.nome"></md-input>
                             </md-input-container>
                             <md-input-container>
-                                <label>Usuario</label>
-                                <md-input type="text" v-model="modalUser.user"></md-input>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Email</label>
-                                <md-input type="text" v-model="modalUser.email"></md-input>
+                                <label>Seguimento</label>
+                                <md-input type="text" v-model="modalItem.seguimento"></md-input>
                             </md-input-container>
                         </form>
                     </div>
                     <div>
                         <md-bottom-bar md-theme="teal">
                             <md-bottom-bar-item md-icon="cancel" @click.native="showEditModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="save" @click.native="showEditModal = false; updateUser()">Salva</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="save" @click.native="showEditModal = false; updateItem()">Salva</md-bottom-bar-item>
                         </md-bottom-bar>
                     </div>
                 </div>
@@ -107,12 +108,12 @@
                         </div>
                     </md-toolbar>
                     <div class="modalContent">
-                        <p>Você vai apagar '{{modalUser.nome}}'.</p>
+                        <p>Você vai apagar '{{modalItem.nome}}'.</p>
                     </div>
                     <div>
                         <md-bottom-bar md-theme="teal">
                             <md-bottom-bar-item md-icon="cancel" @click.native="showDeletModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="delete" @click.native="showDeletModal = false; deleteUser()">Deletar</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="delete" @click.native="showDeletModal = false; deleteItem()">Deletar</md-bottom-bar-item>
                         </md-bottom-bar>
                     </div>
                 </div>
@@ -131,14 +132,14 @@ export default {
     data () {
         return {
             title: 'Cliente',
-        showAddModal: false,
-        showEditModal: false,
-        showDeletModal: false,
-        errorMessage: '',
-        successMessage: '',
-        fantasia: '', nome: '', seguimento: '', dataCad: '',
-        modalItem: {},
-        cleintes: []
+            showAddModal: false,
+            showEditModal: false,
+            showDeletModal: false,
+            errorMessage: '',
+            successMessage: '',
+            fantasia: '', nome: '', seguimento: '', cadastro: '',
+            modalItem: {},
+            clientes: []
         }
     },
     mounted: function(){
@@ -147,39 +148,39 @@ export default {
     },
     methods: {
         getAllItems: function(){
-            this.$store.state.recaregarUsers(this, 'users')
+            this.$store.state.recaregarClientes(this, 'clientes')
         },
-        saveUser: function(){
+        saveItem: function(){
             const data = {
-                'type': 'user',
+                'type': 'cliente',
+                'fantasia': this.fantasia,
                 'nome': this.nome,
-                'email': this.email,
-                'user': this.user,
-                'dataCad': new Date().toJSON()
+                'seguimento': this.seguimento,
+                'cadastro': new Date().toJSON()
             }
             this.$store.state.create(data).then(results => {
-                this.$store.state.recaregarUsers(this, 'users')
+                this.$store.state.recaregarClientes(this, 'clientes')
             })
+            this.fantasia = ''
             this.nome = ''
-            this.email = ''
-            this.user = ''
+            this.seguimento = ''
         },
-        updateUser: function(){
-            this.$store.state.update(this.modalUser).then(results => {
-                this.$store.state.recaregarUsers(this, 'users')
+        updateItem: function(){
+            this.$store.state.update(this.modalItem).then(results => {
+                this.$store.state.recaregarClientes(this, 'clientes')
             })
         },
-        deleteUser: function(){
+        deleteItem: function(){
             const data = {
-                '_id': this.modalUser._id,
-                '_rev': this.modalUser._rev,
+                '_id': this.modalItem._id,
+                '_rev': this.modalItem._rev,
             }
             this.$store.state.delete(data).then(results => {
-                this.$store.state.recaregarUsers(this, 'users')
+                this.$store.state.recaregarClientes(this, 'clientes')
             })
         },
-        selecItem: function(user){
-            this.modalUser = user;
+        selecItem: function(item){
+            this.modalItem = item;
         },
         toFormData: function(obj){
             var form_data = new FormData();
@@ -189,8 +190,8 @@ export default {
                 return form_data;
         },
         clearMassege: function(){
-            this.errorMessage = "";
-            this.successMessage = "";
+            this.errorMessage = '';
+            this.successMessage = '';
         }
     },
 }

@@ -4,10 +4,9 @@
             <sidebar></sidebar>
         </div>
         <div>
-            
-            <md-toolbar class="md-dense md-teal">
-                <h2 class="md-title" style="flex: 1">Users</h2>
-                <md-button class="md-icon-button md-accent" @click.native="showingAddModal = true">
+            <md-toolbar class="md-dense">
+                <h2 class="md-title" style="flex: 1">{{ title }}s</h2>
+                <md-button class="md-icon-button md-accent" @click.native="showAddModal = true">
                     <md-icon>add</md-icon>
                 </md-button>
             </md-toolbar>
@@ -18,19 +17,19 @@
                 <md-table>
                     <md-table-header>
                     <md-table-row>
+                        <md-table-head>Nome Fantasia</md-table-head>
                         <md-table-head>Nome</md-table-head>
-                        <md-table-head>Usuario</md-table-head>
-                        <md-table-head>Email</md-table-head>
+                        <md-table-head>Seguimento</md-table-head>
                         <md-table-head>&nbsp;</md-table-head>
                     </md-table-row>
                     </md-table-header>
                     <md-table-body>
-                    <md-table-row v-for="user in users">
-                        <md-table-cell>{{user.nome}}</md-table-cell>
-                        <md-table-cell>{{user.user}}</md-table-cell>
-                        <md-table-cell>{{user.email}}</md-table-cell>
-                        <md-button class="md-icon-button md-raised md-primary" @click.native="showingEditModal = true; selecUser(user)"><md-icon>edit</md-icon></md-button>
-                        <md-button class="md-icon-button md-raised md-accent" @click.native="showingDeletModal = true; selecUser(user)"><md-icon>delete</md-icon></md-button>
+                    <md-table-row v-for="cliente in clientes">
+                        <md-table-cell>{{ cliente.fantasia }}</md-table-cell>
+                        <md-table-cell>{{ cliente.nome }}</md-table-cell>
+                        <md-table-cell>{{ cliente.seguimento }}</md-table-cell>
+                        <md-button class="md-icon-button md-raised md-primary" @click.native="showEditModal = true; selecItem(cliente)"><md-icon>edit</md-icon></md-button>
+                        <md-button class="md-icon-button md-raised md-accent" @click.native="showDeletModal = true; selecItem(cliente)"><md-icon>delete</md-icon></md-button>
                     </md-table-row>
                     </md-table-body>
                 </md-table>
@@ -38,69 +37,69 @@
 
             <pre>{{ $data }}</pre>
 
-            <div class="modal" id="addModal" v-if="showingAddModal">
+            <div class="modal" id="addModal" v-if="showAddModal">
                 <div class="modalContainer">
                     <md-toolbar>
                         <div class="md-toolbar-container">
-                            <h3 class="md-title">Novo Usuario</h3>
+                            <h3 class="md-title">Novo {{ title }}</h3>
                         </div>
                     </md-toolbar>
                     <div class="modalContent">
                         <form novalidate @submit.stop.prevent="submit">
+                            <md-input-container>
+                                <label>Fantasia</label>
+                                <md-input type="text" v-model="fantasia"></md-input>
+                            </md-input-container>
                             <md-input-container>
                                 <label>Nome</label>
                                 <md-input type="text" v-model="nome"></md-input>
                             </md-input-container>
                             <md-input-container>
-                                <label>Usuario</label>
-                                <md-input type="text" v-model="user"></md-input>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Email</label>
-                                <md-input type="text" v-model="email"></md-input>
+                                <label>Seguimento</label>
+                                <md-input type="text" v-model="seguimento"></md-input>
                             </md-input-container>
                         </form>
                     </div>
                     <div>
                         <md-bottom-bar md-theme="teal">
-                            <md-bottom-bar-item md-icon="cancel" @click.native="showingAddModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="save" @click.native="showingAddModal = false; saveUser()">Salva</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="cancel" @click.native="showAddModal = false">Cancelar</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="save" @click.native="showAddModal = false; saveItem()">Salva</md-bottom-bar-item>
                         </md-bottom-bar>
                     </div>
                 </div>
             </div>
-            <div class="modal" id="editModal" v-if="showingEditModal">
+            <div class="modal" id="editModal" v-if="showEditModal">
                 <div class="modalContainer">
                     <md-toolbar>
                         <div class="md-toolbar-container">
-                            <h3 class="md-title">Editar Usuario</h3>
+                            <h3 class="md-title">Editar {{ title }}</h3>
                         </div>
                     </md-toolbar>
                     <div class="modalContent">
                         <form novalidate @submit.stop.prevent="submit">
                             <md-input-container>
+                                <label>Nome Fantasia</label>
+                                <md-input type="text" v-model="modalItem.fantasia"></md-input>
+                            </md-input-container>
+                            <md-input-container>
                                 <label>Nome</label>
-                                <md-input type="text" v-model="modalUser.nome"></md-input>
+                                <md-input type="text" v-model="modalItem.nome"></md-input>
                             </md-input-container>
                             <md-input-container>
-                                <label>Usuario</label>
-                                <md-input type="text" v-model="modalUser.user"></md-input>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Email</label>
-                                <md-input type="text" v-model="modalUser.email"></md-input>
+                                <label>Seguimento</label>
+                                <md-input type="text" v-model="modalItem.seguimento"></md-input>
                             </md-input-container>
                         </form>
                     </div>
                     <div>
                         <md-bottom-bar md-theme="teal">
-                            <md-bottom-bar-item md-icon="cancel" @click.native="showingEditModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="save" @click.native="showingEditModal = false; updateUser()">Salva</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="cancel" @click.native="showEditModal = false">Cancelar</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="save" @click.native="showEditModal = false; updateItem()">Salva</md-bottom-bar-item>
                         </md-bottom-bar>
                     </div>
                 </div>
             </div>
-            <div class="modal" id="deletModal" v-if="showingDeletModal">
+            <div class="modal" id="deletModal" v-if="showDeletModal">
                 <div class="modalContainer">
                     <md-toolbar>
                         <div class="md-toolbar-container">
@@ -108,12 +107,12 @@
                         </div>
                     </md-toolbar>
                     <div class="modalContent">
-                        <p>Você vai apagar '{{modalUser.nome}}'.</p>
+                        <p>Você vai apagar '{{modalItem.nome}}'.</p>
                     </div>
                     <div>
                         <md-bottom-bar md-theme="teal">
-                            <md-bottom-bar-item md-icon="cancel" @click.native="showingDeletModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="delete" @click.native="showingDeletModal = false; deleteUser()">Deletar</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="cancel" @click.native="showDeletModal = false">Cancelar</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="delete" @click.native="showDeletModal = false; deleteItem()">Deletar</md-bottom-bar-item>
                         </md-bottom-bar>
                     </div>
                 </div>
@@ -127,59 +126,60 @@
 import Sidebar from '../components/principal/Sidebar'
 
 export default {
-    //name: '#user',
+    //name: 'clientes',
     components: { Sidebar },
     data () {
         return {
-        showingAddModal: false,
-        showingEditModal: false,
-        showingDeletModal: false,
-        errorMessage: "",
-        successMessage: "",
-        id: '', nome: "", email: "", user: "", dataCad: '', type: '',
-        modalUser: {},
-        users: []
+            title: 'Localidades',
+            showAddModal: false,
+            showEditModal: false,
+            showDeletModal: false,
+            errorMessage: '',
+            successMessage: '',
+            fantasia: '', nome: '', seguimento: '', cadastro: '',
+            modalItem: {},
+            clientes: []
         }
     },
     mounted: function(){
         console.log("bonina");
-        this.getAllUsers();
+        this.getAllItems();
     },
     methods: {
-        getAllUsers: function(){
-            this.$store.state.recaregarUsers(this, 'users')
+        getAllItems: function(){
+            this.$store.state.recaregarClientes(this, 'clientes')
         },
-        saveUser: function(){
+        saveItem: function(){
             const data = {
-                'type': 'user',
+                'type': 'cliente',
+                'fantasia': this.fantasia,
                 'nome': this.nome,
-                'email': this.email,
-                'user': this.user,
-                'dataCad': new Date().toJSON()
+                'seguimento': this.seguimento,
+                'cadastro': new Date().toJSON()
             }
             this.$store.state.create(data).then(results => {
-                this.$store.state.recaregarUsers(this, 'users')
+                this.$store.state.recaregarClientes(this, 'clientes')
             })
+            this.fantasia = ''
             this.nome = ''
-            this.email = ''
-            this.user = ''
+            this.seguimento = ''
         },
-        updateUser: function(){
-            this.$store.state.update(this.modalUser).then(results => {
-                this.$store.state.recaregarUsers(this, 'users')
+        updateItem: function(){
+            this.$store.state.update(this.modalItem).then(results => {
+                this.$store.state.recaregarClientes(this, 'clientes')
             })
         },
-        deleteUser: function(){
+        deleteItem: function(){
             const data = {
-                '_id': this.modalUser._id,
-                '_rev': this.modalUser._rev,
+                '_id': this.modalItem._id,
+                '_rev': this.modalItem._rev,
             }
             this.$store.state.delete(data).then(results => {
-                this.$store.state.recaregarUsers(this, 'users')
+                this.$store.state.recaregarClientes(this, 'clientes')
             })
         },
-        selecUser: function(user){
-            this.modalUser = user;
+        selecItem: function(item){
+            this.modalItem = item;
         },
         toFormData: function(obj){
             var form_data = new FormData();
@@ -189,8 +189,8 @@ export default {
                 return form_data;
         },
         clearMassege: function(){
-            this.errorMessage = "";
-            this.successMessage = "";
+            this.errorMessage = '';
+            this.successMessage = '';
         }
     },
 }

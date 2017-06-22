@@ -44,6 +44,27 @@ state.recaregarUsers = (obj, prop) => {
     db.sync(remotedb)
   }
 }
+//<--Clientes-->
+state.findClientes = () => {
+  function map (doc, emit) {
+    if (doc.type === 'cliente') {
+      emit(doc.createdAt)
+    }
+  }
+  return db.query(map, {include_docs: true}).then(clientes =>
+    _.map(clientes.rows, (cliente) => cliente.doc)
+  )
+}
+
+state.recaregarClientes = (obj, prop) => {
+  state.findClientes().then(clientes => {
+    obj[prop] = _.map(clientes, (cliente) => cliente)
+  })
+  if (remotedb) {
+    db.sync(remotedb)
+  }
+}
+//<--Clientes--> 
 
 const mutations = {
     SET_USER(state, user){
