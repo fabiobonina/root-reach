@@ -1,7 +1,7 @@
 <template>
     
     <div id="app"class="phone-viewport">
-        <md-toolbar>
+        <md-toolbar class="md-dense">
             <md-button class="md-icon-button" @click.native="toggleLeftSidenav">
                 <md-icon>menu</md-icon>
             </md-button>
@@ -9,7 +9,7 @@
 
             <md-button class="md-fab md-clean md-mini" @click.native="toggleRightSidenav">
                 <md-avatar>
-                    <img :src="currentUser.photoURL" alt="Avatar">
+                    <img alt="Avatar">
                 </md-avatar>
             </md-button>
         </md-toolbar>

@@ -1,12 +1,12 @@
 <template>
     <div>
-        <sidebar></sidebar>
-            <md-toolbar class="md-medium">
-                <md-button class="md-icon-button">
-                    <md-icon>menu</md-icon>
-                </md-button>
-                <h2 class="md-title" style="flex: 1">Users</h2>
-                <md-button class="md-icon-button" @click.native="showingAddModal = true">
+        <div>
+            <sidebar></sidebar>
+        </div>
+        <div>
+            <md-toolbar class="md-dense">
+                <h2 class="md-title" style="flex: 1">{{ title }}s</h2>
+                <md-button class="md-icon-button md-accent" @click.native="showAddModal = true">
                     <md-icon>add</md-icon>
                 </md-button>
             </md-toolbar>
@@ -17,21 +17,19 @@
                 <md-table>
                     <md-table-header>
                     <md-table-row>
-                        <md-table-head>ID</md-table-head>
+                        <md-table-head>Nome Fantasia</md-table-head>
                         <md-table-head>Nome</md-table-head>
-                        <md-table-head>Usuario</md-table-head>
-                        <md-table-head>Email</md-table-head>
+                        <md-table-head>Seguimento</md-table-head>
                         <md-table-head>&nbsp;</md-table-head>
                     </md-table-row>
                     </md-table-header>
                     <md-table-body>
-                    <md-table-row v-for="user in users">
-                        <md-table-cell>{{user.id}}</md-table-cell>
-                        <md-table-cell>{{user.nome}}</md-table-cell>
-                        <md-table-cell>{{user.user}}</md-table-cell>
-                        <md-table-cell>{{user.email}}</md-table-cell>
-                        <md-button class="md-icon-button md-raised md-primary" @click.native="showingEditModal = true; selecUser(user)"><md-icon>edit</md-icon></md-button>
-                        <md-button class="md-icon-button md-raised md-accent" @click.native="showingDeletModal = true; selecUser(user)"><md-icon>delete</md-icon></md-button>
+                    <md-table-row v-for="cliente in clientes">
+                        <md-table-cell>{{ cliente.fantasia }}</md-table-cell>
+                        <md-table-cell>{{ cliente.nome }}</md-table-cell>
+                        <md-table-cell>{{ cliente.seguimento }}</md-table-cell>
+                        <md-button class="md-icon-button md-raised md-primary" @click.native="showEditModal = true; selecItem(cliente)"><md-icon>edit</md-icon></md-button>
+                        <md-button class="md-icon-button md-raised md-accent" @click.native="showDeletModal = true; selecItem(cliente)"><md-icon>delete</md-icon></md-button>
                     </md-table-row>
                     </md-table-body>
                 </md-table>
@@ -39,11 +37,11 @@
 
             <pre>{{ $data }}</pre>
 
-            <div class="modal" id="addModal" v-if="showingAddModal">
+            <div class="modal" id="addModal" v-if="showAddModal">
                 <div class="modalContainer">
                     <md-toolbar>
                         <div class="md-toolbar-container">
-                            <h3 class="md-title">Novo Usuario</h3>
+                            <h3 class="md-title">Novo {{ title }}</h3>
                         </div>
                     </md-toolbar>
                     <div class="modalContent">
@@ -64,17 +62,17 @@
                     </div>
                     <div>
                         <md-bottom-bar md-theme="teal">
-                            <md-bottom-bar-item md-icon="cancel" @click.native="showingAddModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="save" @click.native="showingAddModal = false; saveUser()">Salva</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="cancel" @click.native="showAddModal = false">Cancelar</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="save" @click.native="showAddModal = false; saveUser()">Salva</md-bottom-bar-item>
                         </md-bottom-bar>
                     </div>
                 </div>
             </div>
-            <div class="modal" id="editModal" v-if="showingEditModal">
+            <div class="modal" id="editModal" v-if="showEditModal">
                 <div class="modalContainer">
                     <md-toolbar>
                         <div class="md-toolbar-container">
-                            <h3 class="md-title">Editar Usuario</h3>
+                            <h3 class="md-title">Editar {{ title }}</h3>
                         </div>
                     </md-toolbar>
                     <div class="modalContent">
@@ -95,13 +93,13 @@
                     </div>
                     <div>
                         <md-bottom-bar md-theme="teal">
-                            <md-bottom-bar-item md-icon="cancel" @click.native="showingEditModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="save" @click.native="showingEditModal = false; updateUser()">Salva</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="cancel" @click.native="showEditModal = false">Cancelar</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="save" @click.native="showEditModal = false; updateUser()">Salva</md-bottom-bar-item>
                         </md-bottom-bar>
                     </div>
                 </div>
             </div>
-            <div class="modal" id="deletModal" v-if="showingDeletModal">
+            <div class="modal" id="deletModal" v-if="showDeletModal">
                 <div class="modalContainer">
                     <md-toolbar>
                         <div class="md-toolbar-container">
@@ -113,41 +111,42 @@
                     </div>
                     <div>
                         <md-bottom-bar md-theme="teal">
-                            <md-bottom-bar-item md-icon="cancel" @click.native="showingDeletModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="delete" @click.native="showingDeletModal = false; deleteUser()">Deletar</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="cancel" @click.native="showDeletModal = false">Cancelar</md-bottom-bar-item>
+                            <md-bottom-bar-item md-icon="delete" @click.native="showDeletModal = false; deleteUser()">Deletar</md-bottom-bar-item>
                         </md-bottom-bar>
                     </div>
                 </div>
             </div>
         </div>
-
+    </div>
 </template>
 
 <script>
 
-import SideBar from '../components/principal/Sidebar'
+import Sidebar from '../components/principal/Sidebar'
 
 export default {
-    //name: '#user',
-    components: { SideBar },
+    //name: 'clientes',
+    components: { Sidebar },
     data () {
         return {
-        showingAddModal: false,
-        showingEditModal: false,
-        showingDeletModal: false,
-        errorMessage: "",
-        successMessage: "",
-        id: '', nome: "", email: "", user: "", dataCad: '', type: '',
-        modalUser: {},
-        users: []
+            title: 'Cliente',
+        showAddModal: false,
+        showEditModal: false,
+        showDeletModal: false,
+        errorMessage: '',
+        successMessage: '',
+        fantasia: '', nome: '', seguimento: '', dataCad: '',
+        modalItem: {},
+        cleintes: []
         }
     },
     mounted: function(){
         console.log("bonina");
-        this.getAllUsers();
+        this.getAllItems();
     },
     methods: {
-        getAllUsers: function(){
+        getAllItems: function(){
             this.$store.state.recaregarUsers(this, 'users')
         },
         saveUser: function(){
@@ -179,7 +178,7 @@ export default {
                 this.$store.state.recaregarUsers(this, 'users')
             })
         },
-        selecUser: function(user){
+        selecItem: function(user){
             this.modalUser = user;
         },
         toFormData: function(obj){
