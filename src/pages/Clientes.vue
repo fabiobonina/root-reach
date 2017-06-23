@@ -28,7 +28,7 @@
                         <md-table-cell>{{ cliente.fantasia }}</md-table-cell>
                         <md-table-cell>{{ cliente.nome }}</md-table-cell>
                         <md-table-cell>{{ cliente.seguimento }}</md-table-cell>
-                        <a class="btn btn-default" :href="'#/cliente/' + cliente._id">View</a>
+                        <router-link :to="'/cliente/' + cliente._id"><md-button md-theme="brown" class="md-icon-button md-raised"><md-icon>visibility</md-icon></md-button></router-link>
                         <md-button class="md-icon-button md-raised md-primary" @click.native="showEditModal = true; selecItem(cliente)"><md-icon>edit</md-icon></md-button>
                         <md-button class="md-icon-button md-raised md-accent" @click.native="showDeletModal = true; selecItem(cliente)"><md-icon>delete</md-icon></md-button>
                     </md-table-row>
@@ -150,6 +150,9 @@ export default {
     mounted: function(){
         console.log("bonina");
         this.getAllItems();
+    },
+    props: {
+        cliente: Object
     },
     methods: {
         getAllItems: function(){

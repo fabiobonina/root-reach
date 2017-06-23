@@ -64,7 +64,21 @@ state.recaregarClientes = (obj, prop) => {
     db.sync(remotedb)
   }
 }
+state.findClienteById = (id) => {
+  return db.get(id)
+}
 //<--Clientes--> 
+
+state.findLocalidadesByClienteId = (clienteId) => {
+  function map (doc, emit) {
+    if (doc.clienteId === clienteId) {
+      emit(doc.createdAt)
+    }
+  }
+  return db.query(map, {include_docs: true}).then(localidades =>
+    _.map(localidades.rows, (localidade) => localidade.doc)
+  )
+}
 
 const mutations = {
     SET_USER(state, user){
