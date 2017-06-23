@@ -11,8 +11,8 @@
                 </md-button>
             </md-toolbar>
             <div>
-                <p class="successMessage" v-if="successMessage">{{successMessage}}</p>
-                <p class="errorMessage" v-if="errorMessage">{{errorMessage}}</p>
+                <p class="successMessage" v-if="successMessage">{{ successMessage }}</p>
+                <p class="errorMessage" v-if="errorMessage">{{ errorMessage }}</p>
                 
                 <md-table>
                     <md-table-header>
@@ -57,7 +57,12 @@
                             </md-input-container>
                             <md-input-container>
                                 <label>Seguimento</label>
-                                <md-input type="text" v-model="seguimento"></md-input>
+                                <md-select v-model="seguimento">
+                                    <md-option value="bebida">Bebida</md-option>
+                                    <md-option value="industria">Industria</md-option>
+                                    <md-option value="saneamento">Saneamento</md-option>                                 
+                                    <md-option value="outro">Outro</md-option>
+                                </md-select>
                             </md-input-container>
                         </form>
                     </div>
