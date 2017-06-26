@@ -20,7 +20,7 @@
                                 <md-icon>add</md-icon>
                             </md-button>
                         </md-toolbar>
-                        <md-list v-for="item in localidades">
+                        <md-list class="custom-list md-triple-line" v-for="item in localidades">
                             <md-list-item>
                             <md-icon class="md-primary">location_on</md-icon>
 
@@ -29,12 +29,23 @@
                                 <p>{{ item.tipo }}</p>
                                 <p>{{ item.municipio }}/{{ item.uf }}</p>
                             </div>
-                            <router-link :to="'/cliente/' + item._id"><md-button md-theme="brown" class="md-icon-button md-raised"><md-icon>visibility</md-icon></md-button></router-link>
-                        <md-button class="md-icon-button md-raised md-primary" @click.native="showEditModal = true; selecItem(item)"><md-icon>edit</md-icon></md-button>
-                        <md-button class="md-icon-button md-raised md-accent" @click.native="showDeletModal = true; selecItem(item)"><md-icon>delete</md-icon></md-button>
-                            <md-button class="md-icon-button md-list-action">
-
-                            </md-button>
+                            <md-button md-theme="brown" class="md-icon-button md-raised md-dense"><router-link :to="'/cliente/' + item._id"><md-icon>visibility</md-icon></router-link></md-button>
+                            <md-menu md-size="4" md-direction="bottom left">
+                                <md-button class="md-icon-button" md-menu-trigger>
+                                    <md-icon>more_vert</md-icon>
+                                </md-button>
+                                <md-menu-content>
+                                    <md-menu-item @click.native="showEditModal = true; selecItem(item)">
+                                    <span>Editar</span>
+                                    <md-icon>edit</md-icon>
+                                    </md-menu-item>
+                                    <md-menu-item @click.native="showDeletModal = true; selecItem(item)">
+                                    <span>Deletar</span>
+                                    <md-icon>delete</md-icon>
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                            
                             </md-list-item>
                             <md-divider class="md-inset"></md-divider>
                             </md-list-item>
@@ -205,12 +216,12 @@ export default {
         getAllItems: function(){
             //console.log(this.$route.params.id);
             this.$store.state.findClienteById(this.$route.params.id).then(cliente =>
-                //this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
+                this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
                     this.cliente = cliente,
-                  //  this.localidades = localidades
-                //}),
+                    this.localidades = localidades
+                }),
             )
-            this.$store.state.recaregarLocalidades(this, 'localidades')
+            //this.$store.state.recaregarLocalidades(this, 'localidades')
             //this.$store.state.findLocalidadesByClienteId(cliente._id).then(comments =>{
             //this.comments = comments
             //})
@@ -224,14 +235,15 @@ export default {
                 'tipo': this.tipo,
                 'municipio': this.municipio,
                 'uf': this.uf,
+                'atendimento': '0',
                 'ativo': this.ativo,
                 'cadastro': new Date().toJSON()
             }
             this.$store.state.create(data).then(results => {
-                //this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
-                //    this.localidades = localidades
-                //})
-                 this.$store.state.recaregarlocalidades(this, 'localidades')
+                this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
+                    this.localidades = localidades
+                })
+                 //this.$store.state.recaregarlocalidades(this, 'localidades')
             })
             this.tipo = ''
             this.nome = ''
