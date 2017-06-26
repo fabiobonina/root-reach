@@ -2,15 +2,13 @@
     
     <div id="app"class="phone-viewport">
         <div>
-            <md-toolbar class="md-dense" md-theme="green">
+            <md-toolbar class="md-dense">
                 <router-link to="/"><md-button><md-icon>home</md-icon></md-button></router-link>
                 <router-link to="/clientes"><md-button>Clientes</md-button></router-link>
-                <router-link to="/localidades"><md-button>Localidades</md-button></router-link>
                 <router-link to="/usuarios"><md-button>Usuarios</md-button></router-link>
             </md-toolbar>
         </div>
-
-  </div>
+    </div>
 
 </template>
 

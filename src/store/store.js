@@ -64,11 +64,17 @@ state.recaregarClientes = (obj, prop) => {
     db.sync(remotedb)
   }
 }
+
 state.findClienteById = (id) => {
-  return db.get(id)
+    return db.get(id).then(function (doc) {
+      console.log(doc);
+      return doc;
+    }).catch(function (err) {
+      console.log(err);
+  })
 }
 //<--Clientes--> 
-
+//<--Localidades-->
 state.findLocalidadesByClienteId = (clienteId) => {
   function map (doc, emit) {
     if (doc.clienteId === clienteId) {
@@ -77,8 +83,42 @@ state.findLocalidadesByClienteId = (clienteId) => {
   }
   return db.query(map, {include_docs: true}).then(localidades =>
     _.map(localidades.rows, (localidade) => localidade.doc)
+  ).catch( function (err) {
+  console.log(err)
+  })
+}
+state.findLocalidades = () => {
+  function map (doc, emit) {
+    if (doc.type === 'localidade') {
+      emit(doc.createdAt)
+    }
+  }
+  return db.query(map, {include_docs: true}).then(localidades =>
+    _.map(localidades.rows, (localidade) => localidade.doc)
   )
 }
+
+state.recaregarLocalidades = (obj, prop) => {
+  state.findLocalidades().then(localidades => {
+    obj[prop] = _.map(localidades, (localidade) => localidade)
+  })
+  if (remotedb) {
+    db.sync(remotedb)
+  }
+  
+}
+
+state.findLocalidadeById = (id) => {
+    return db.get(id).then(function (doc) {
+      console.log(doc);
+      return doc;
+    }).catch(function (err) {
+      console.log(err);
+  })
+}
+//<--Localidades-->
+
+
 
 const mutations = {
     SET_USER(state, user){

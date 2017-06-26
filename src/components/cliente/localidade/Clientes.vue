@@ -11,8 +11,8 @@
                 </md-button>
             </md-toolbar>
             <div>
-                <p class="successMessage" v-if="successMessage">{{successMessage}}</p>
-                <p class="errorMessage" v-if="errorMessage">{{errorMessage}}</p>
+                <p class="successMessage" v-if="successMessage">{{ successMessage }}</p>
+                <p class="errorMessage" v-if="errorMessage">{{ errorMessage }}</p>
                 
                 <md-table>
                     <md-table-header>
@@ -28,6 +28,7 @@
                         <md-table-cell>{{ cliente.fantasia }}</md-table-cell>
                         <md-table-cell>{{ cliente.nome }}</md-table-cell>
                         <md-table-cell>{{ cliente.seguimento }}</md-table-cell>
+                        <router-link :to="'/cliente/' + cliente._id"><md-button md-theme="brown" class="md-icon-button md-raised"><md-icon>visibility</md-icon></md-button></router-link>
                         <md-button class="md-icon-button md-raised md-primary" @click.native="showEditModal = true; selecItem(cliente)"><md-icon>edit</md-icon></md-button>
                         <md-button class="md-icon-button md-raised md-accent" @click.native="showDeletModal = true; selecItem(cliente)"><md-icon>delete</md-icon></md-button>
                     </md-table-row>
@@ -56,7 +57,12 @@
                             </md-input-container>
                             <md-input-container>
                                 <label>Seguimento</label>
-                                <md-input type="text" v-model="seguimento"></md-input>
+                                <md-select v-model="seguimento">
+                                    <md-option value="bebida">Bebida</md-option>
+                                    <md-option value="industria">Industria</md-option>
+                                    <md-option value="saneamento">Saneamento</md-option>                                 
+                                    <md-option value="outro">Outro</md-option>
+                                </md-select>
                             </md-input-container>
                         </form>
                     </div>
@@ -130,7 +136,7 @@ export default {
     components: { Sidebar },
     data () {
         return {
-            title: 'Localidades',
+            title: 'Cliente',
             showAddModal: false,
             showEditModal: false,
             showDeletModal: false,
@@ -144,6 +150,9 @@ export default {
     mounted: function(){
         console.log("bonina");
         this.getAllItems();
+    },
+    props: {
+        cliente: Object
     },
     methods: {
         getAllItems: function(){
