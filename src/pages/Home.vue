@@ -1,10 +1,15 @@
 <template>
-    <div id="demo">
+    <body id="demo">
         <sidebar></sidebar>
         <!-- component template -->
         <!-- demo root element -->
         <div>
-            <form id="search">
+            <form novalidate @submit.stop.prevent="submit" id="search">
+            <md-input-container>
+                <label>Search</label>
+                <md-textarea name="query" v-model="searchQuery"></md-textarea>
+                <md-icon>search</md-icon>
+            </md-input-container>
                 Search <input name="query" v-model="searchQuery">
             </form>
             <demogrid
@@ -16,7 +21,7 @@
 
         <pre>{{ $data }}</pre>
 
-        </div>
+        </body>
 
 </template>
 
@@ -32,20 +37,19 @@ export default {
     data () {
         return {
             searchQuery: '',
-            gridColumns: ['name', 'power'],
-            gridData: [
-                { name: 'Chuck Norris', power: Infinity },
-                { name: 'Bruce Lee', power: 9000 },
-                { name: 'Jackie Chan', power: 7000 },
-                { name: 'Jet Li', power: 8000 }
-            ]
+            gridColumns: ['fantasia', 'nome', 'seguimento'],
+            gridData: []
         }
     },
     mounted: function(){
         console.log("bonina");
-
+        this.getAllItems();
     },
     methods: {
+        getAllItems: function(){
+            this.$store.state.recaregarClientes(this, 'gridData')
+        },
+
     },
 }
 </script>
@@ -56,9 +60,4 @@ body {
   font-size: 14px;
   color: #444;
 }
-
-
-
-
-
 </style>
