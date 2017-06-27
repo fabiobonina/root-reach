@@ -4,12 +4,14 @@ import Hello from '@/components/Hello'
 import Cliente from '@/components/cliente/Cliente'
 import Usuarios from '@/pages/Usuarios'
 import Clientes from '@/pages/Clientes'
+import Home from '@/pages/Home'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
-    { path: '/', name: 'Usuarios', component: Usuarios },
+    { path: '/', name: 'Home', component: Home },
+    { path: '/Usuarios', name: 'Usuarios', component: Usuarios },
     { path: '/hello', name: 'Hello', component: Hello },
     { path: '/clientes', name: 'Clientes', component: Clientes },
     { path: '/cliente/:id', name: 'Cliente', component: Cliente },
