@@ -32,17 +32,6 @@
         </v-card>
         </div>
 
-        <div id="app">
-  <button id="show-modal" @click="showModal = true">Show Modal</button>
-  <!-- use the modal component, pass in the prop -->
-  <modal v-if="showModal" @close="showModal = false">
-    <!--
-      you can use custom content here to overwrite
-      default content
-    -->
-    <h3 slot="header">custom header</h3>
-  </modal>
-</div>
         <pre>{{ $data }}</pre>
 
         </body>
@@ -53,18 +42,16 @@
 
 import Sidebar from '../components/principal/Sidebar1'
 import Demogrid from '../components/principal/Demogrid'
-import Modal from '../components/cliente/add'
 
 export default {
     // bootstrap the demo
     //name: '#demo',
-    components: { Sidebar, Demogrid, Modal },
+    components: { Sidebar, Demogrid },
     data () {
         return {
             searchQuery: '',
             gridColumns: ['fantasia', 'nome', 'seguimento'],
-            gridData: [],
-            showModal: false
+            gridData: []
         }
     },
     mounted: function(){
@@ -85,16 +72,5 @@ body {
   font-family: Helvetica Neue, Arial, sans-serif;
   font-size: 14px;
   color: #444;
-}
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, .5);
-  display: table;
-  transition: opacity .3s ease;
 }
 </style>

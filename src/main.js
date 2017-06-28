@@ -6,6 +6,9 @@ import router from './router'
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.css'
 import store from './store/store'
+import Vuetify from 'vuetify'
+ 
+Vue.use(Vuetify)
 
 Vue.use(VueMaterial)
 
