@@ -36,15 +36,13 @@
                     <pre>{{ $data }}</pre>
             </v-container>
         </main>
-
-
-        </body>
+    </body>
 
 </template>
 
 <script>
 
-import Sidebar from '../components/principal/Sidebar1'
+import Sidebar from '../components/principal/Sidebar'
 import Demogrid from '../components/principal/Demogrid'
 import Modal from '../components/cliente/add'
 
