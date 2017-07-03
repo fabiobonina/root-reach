@@ -1,5 +1,39 @@
 <template>
     <div>
+    <template>
+  <v-layout row>
+    <v-flex xs16 sm6 offset-sm3>
+      <v-card>
+        <v-toolbar class="white--text pink" light>
+          <v-toolbar-side-icon light></v-toolbar-side-icon>
+          <v-toolbar-title>Inbox</v-toolbar-title>
+          <v-btn light icon>
+            <v-icon>search</v-icon>
+          </v-btn>
+          <v-btn light icon>
+            <v-icon>check_circle</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-list two-line>
+          <v-list-item v-for="(item, index) in items" v-bind:key="item.nome">
+            <v-list-tile avatar ripple>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ item.nome }}</v-list-tile-title>
+                <v-list-tile-sub-title class="grey--text text--darken-4">{{ item.tipo }}</v-list-tile-sub-title>
+                <v-list-tile-sub-title>{{ item.municipio }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+              <v-list-tile-action>
+                <v-list-tile-action-text>{{ item.ativo }}</v-list-tile-action-text>
+                <v-icon class="grey--text text--lighten-1">star_border</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+            <v-divider v-if="index + 1 < items.length"></v-divider>
+          </v-list-item>
+        </v-list>
+      </v-card>
+    </v-flex>
+  </v-layout>
+</template>
         <main>
             <v-container fluid>
                 <v-card>
@@ -9,9 +43,10 @@
                     </v-card-title>
                     <v-data-table v-bind:headers="headers" v-bind:items="items" v-bind:search="search">
                         <template slot="items" scope="props">
-                            <td>{{ props.item.fantasia }}</td>
+                            <td>{{ props.item.tipo }}</td>
                             <td>{{ props.item.nome }}</td>
-                            <td>{{ props.item.seguimento }}</td>
+                            <td>{{ props.item.municipio }}</td>
+                            <td>{{ props.item.uf }}</td>
                             <td>
                                 <router-link :to="'/'+ props.item.type +'/' + props.item._id"><v-btn floating small class="green"><v-icon light>visibility</v-icon></v-btn></router-link>
                                 <v-btn floating small class="blue" @click.native="showModalEdt = true; selecItem(props.item)"><v-icon light>edit</v-icon></v-btn>
@@ -25,17 +60,18 @@
                     <pre>{{ $data }}</pre>
                     <div id="app">
                         <!-- use the modal component, pass in the prop -->
-                        <modal-add @close="showModalAdd = false" @atualizar="itemModal" v-if="showModalAdd"  ></modal-add>
+                        <modal-add @close="showModalAdd = false" @atualizar="itemModal" v-if="showModalAdd" :data="cliente"></modal-add>
                         <modal-edt @close="showModalEdt = false" @atualizar="itemModal" v-if="showModalEdt" :data="modalItem"></modal-edt>
-                        <modal-del @close="showModalDel = false" @atualizar="itemModal" v-if="showModalDel"  :data="modalItem"> </modal-del>
+                        <modal-del @close="showModalDel = false" @atualizar="itemModal" v-if="showModalDel" :data="modalItem"> </modal-del>
                     </div>
-                    <pre>{{ $data }}</pre>
                 </v-card>
 
             </v-container>
         </main>
+
     </div>
 </template>
+
 
 <script>
 import ModalAdd from './add'
@@ -44,39 +80,53 @@ import ModalDel from './del'
 export default {
     //nome: '#user',
     components: { ModalAdd, ModalEdt, ModalDel },
-    props: {
-        cliente: {}
-    },
     data () {
         return {
-        title: 'Localidades',
-        showModalAdd: false, showModalEdt: false, showModalDel: false,
-        errorMessage: '', successMessage: '',
-        modalItem: {},
-        cliente: this.cliente,
-        search: '',
-        pagination: {},
-        headers: [
-            { text: 'Nome Fantasia', left: true, value: 'fantasia' },
-            { text: 'Nome', value: 'nome'},
-            { text: 'Seguimento', value: 'seguimento' },
-            { text: 'Ação', value: 'acao' }
-        ],
-        items: []
+            title: 'Localidades',
+            showModalAdd: false, showModalEdt: false, showModalDel: false,
+            modalItem: {},
+            cliente: '',
+            items: [],
+            search: '',
+            pagination: {},
+            headers: [
+                { text: 'Tipo', left: true, value: 'tipo' },
+                { text: 'Nome', value: 'nome'},
+                { text: 'municipio', value: 'municipio' },
+                { text: 'UF', value: 'uf' },
+                { text: 'Ação', value: 'acao' }
+            ]
         }
     },
-    mounted: function(){
-        console.log("bonina");
-        this.getAllUsers();
+    watch: {
+        // sempre que a pergunta mudar, essa função será executada
     },
+    beforeCreate: function() {
+	    this.$store.state.findClienteById(this.$route.params.id).then(cliente => {
+                this.$store.state.findLocalidadesByClienteId(this.$route.params.id).then(localidades => {
+                    this.cliente = cliente
+                    this.items = localidades
+                })
+        })
+
+    },
+    mounted: function(){
+        console.log("bonina");     
+
+    },    
     methods: {
         getAllUsers: function(){
-            this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
-                this.items = localidades
+            this.$store.state.findClienteById(this.$route.params.id).then(cliente => {
+                this.$store.state.findLocalidadesByClienteId(this.$route.params.id).then(localidades => {
+                    this.cliente = cliente
+                    this.items = localidades
+                })
             })
         },
         itemModal: function(){
-            this.$store.state.recaregarClientes(this, 'items'),
+            this.$store.state.findLocalidadesByClienteId(this.$route.params.id).then(localidades => {
+                this.items = localidades
+            }),
             this.showModalAdd = false,
             this.showModalEdt = false,
             this.showModalDel = false,

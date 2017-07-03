@@ -23,9 +23,9 @@
                             label="Nome"
                             v-model="nome"
                             ></v-text-field>
-                            <v-text-field class="mt-5" required
-                            label="regional"
-                            v-model="Regional"
+                            <v-text-field class="mt-5"
+                            label="Regional"
+                            v-model="regional"
                             ></v-text-field>
                             <v-text-field required
                             label="municipio"
@@ -35,7 +35,7 @@
                             label="UF"
                             v-model="uf"
                             ></v-text-field>
-                            <v-text-field required
+                            <v-text-field
                             label="Ativo"
                             v-model="ativo"
                             ></v-text-field>
@@ -43,6 +43,7 @@
                         </v-card-text>
                         </v-card>
                     </v-flex>
+                    
                 </template>
                 <v-toolbar class="indigo" light>
                     <v-toolbar-title>
@@ -52,6 +53,7 @@
                         </v-btn>
                     </v-toolbar-title>
                 </v-toolbar>
+                <pre>{{ $data }}</pre>
             </div>
         </div>
     </transition>
@@ -61,12 +63,15 @@
 <script>
 export default {
     //name: 'clientes',
+    props: {
+        data: {}
+    },
     data () {
         return {
             errors: [],
             title: 'localidade',
-            clienteId: '', clienteNome: '',nome: '', tipo: '', regional: '', municipio: '', uf: '', ativo: '', cadastro: '',
-            clientes: [],
+            cliente: this.data,
+            nome: '', tipo: '', regional: '', municipio: '', uf: '', ativo: '', cadastro: '',
             states: ['Capitação','Elevatoria','ETA','ETE','Industria','Poço','Outro']
         }
     },
@@ -97,7 +102,7 @@ export default {
         saveItem: function(){
             const data = {
                 'type': 'localidade',
-                'clienteId': this.clienteId,
+                'clienteId': this.cliente._id,
                 'clienteNome': this.cliente.fantasia,
                 'nome': this.nome,
                 'tipo': this.tipo,
