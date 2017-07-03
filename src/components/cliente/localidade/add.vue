@@ -13,24 +13,32 @@
                     <v-flex xs12 md16 offset-md1>
                         <v-card>
                         <v-card-text>
-                            <v-text-field class="mt-5" required
-                            label="Fantasia"
-                            v-model="fantasia"
-                            ></v-text-field>
-                            <v-text-field required
-                            label="Nome"
-                            hint="Nome completo"
-                            v-model="nome"
-                            ></v-text-field>
                             <v-flex xs6>
-                                <v-select v-bind:items="states" required
-                                v-model="seguimento"
-                                label="Seguimento"
-                                dark
-                                single-line
-                                auto
+                                <v-select v-bind:items="states" required dark single-line auto
+                                v-model="tipo"
+                                label="Tipo"
                                 ></v-select>
                             </v-flex>
+                            <v-text-field required
+                            label="Nome"
+                            v-model="nome"
+                            ></v-text-field>
+                            <v-text-field class="mt-5" required
+                            label="regional"
+                            v-model="Regional"
+                            ></v-text-field>
+                            <v-text-field required
+                            label="municipio"
+                            v-model="municipio"
+                            ></v-text-field>
+                            <v-text-field required hint="Exemplo: PE"
+                            label="UF"
+                            v-model="uf"
+                            ></v-text-field>
+                            <v-text-field required
+                            label="Ativo"
+                            v-model="ativo"
+                            ></v-text-field>
                             <small>*campos obrigatório</small>
                         </v-card-text>
                         </v-card>
@@ -56,10 +64,10 @@ export default {
     data () {
         return {
             errors: [],
-            title: 'cliente',
-            fantasia: '', nome: '', seguimento: '', cadastro: '',
+            title: 'localidade',
+            clienteId: '', clienteNome: '',nome: '', tipo: '', regional: '', municipio: '', uf: '', ativo: '', cadastro: '',
             clientes: [],
-            states: ['Bebida','Industria','Saneamento','Outro']
+            states: ['Capitação','Elevatoria','ETA','ETE','Industria','Poço','Outro']
         }
     },
     mounted: function(){
@@ -72,35 +80,48 @@ export default {
     },
     watch: {
         // sempre que a pergunta mudar, essa função será executada
-        fantasia: function (data) {
+        tipo: function (data) {
             this.formValido();
         },
         nome: function (data) {
             this.formValido();
         },
-        seguimento: function (data) {
+        municipio: function (data) {
+            this.formValido();
+        },
+        uf: function (data) {
             this.formValido();
         }
     },
     methods: {
         saveItem: function(){
-            this.errors = []
-            if(this.formValido()){
-                const data = {
-                    'type': 'cliente',
-                    'fantasia': this.fantasia,
-                    'nome': this.nome,
-                    'seguimento': this.seguimento,
-                    'cadastro': new Date().toJSON()
-                }
-                this.$store.state.create(data)
-                this.fantasia = ''
-                this.nome = ''
-                this.seguimento = ''
+            const data = {
+                'type': 'localidade',
+                'clienteId': this.clienteId,
+                'clienteNome': this.cliente.fantasia,
+                'nome': this.nome,
+                'tipo': this.tipo,
+                'municipio': this.municipio,
+                'uf': this.uf,
+                'ativo': this.ativo,
+                'cadastro': new Date().toJSON()
             }
+            this.$store.state.create(data).then(results => {
+                this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
+                    this.localidades = localidades
+                })
+                 //this.$store.state.recaregarlocalidades(this, 'localidades')
+            })
+            this.tipo = ''
+            this.nome = ''
+            this.regional = ''
+            this.municipio = ''
+            this.uf = ''
+            this.ativo = ''
+
         },
         ehVazia () {
-            if(this.fantasia.length == 0 || this.nome.length == 0 || this.seguimento.length == 0 ){
+            if(this.tipo.length == 0 || this.nome.length == 0 || this.municipio.length == 0 || this.uf.length == 0){
                 return true
             }
             return false
@@ -130,14 +151,4 @@ export default {
     margin: auto;
     margin-top: 70px;
 }
-.modalHeading{
-    padding: 9px;
-    background: #06307c;
-    color: #FFFFFF;
-}
-.modalContent{
-    min-height: 333px;
-    padding: 44px;
-}
-
 </style>

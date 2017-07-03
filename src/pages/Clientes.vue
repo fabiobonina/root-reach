@@ -1,194 +1,85 @@
 <template>
     <div>
-        <div>
-            <sidebar></sidebar>
-        </div>
-        <div>
-            <md-toolbar class="md-dense">
-                <h2 class="md-title" style="flex: 1">{{ title }}s</h2>
-                <md-button class="md-icon-button md-accent" @click.native="showAddModal = true">
-                    <md-icon>add</md-icon>
-                </md-button>
-            </md-toolbar>
-            <div>
-                <p class="successMessage" v-if="successMessage">{{ successMessage }}</p>
-                <p class="errorMessage" v-if="errorMessage">{{ errorMessage }}</p>
-                
-                <md-table>
-                    <md-table-header>
-                    <md-table-row>
-                        <md-table-head>Nome Fantasia</md-table-head>
-                        <md-table-head>Nome</md-table-head>
-                        <md-table-head>Seguimento</md-table-head>
-                        <md-table-head>&nbsp;</md-table-head>
-                    </md-table-row>
-                    </md-table-header>
-                    <md-table-body>
-                    <md-table-row v-for="cliente in clientes">
-                        <md-table-cell>{{ cliente.fantasia }}</md-table-cell>
-                        <md-table-cell>{{ cliente.nome }}</md-table-cell>
-                        <md-table-cell>{{ cliente.seguimento }}</md-table-cell>
-                        <router-link :to="'/cliente/' + cliente._id"><md-button md-theme="brown" class="md-icon-button md-raised"><md-icon>visibility</md-icon></md-button></router-link>
-                        <md-button class="md-icon-button md-raised md-primary" @click.native="showEditModal = true; selecItem(cliente)"><md-icon>edit</md-icon></md-button>
-                        <md-button class="md-icon-button md-raised md-accent" @click.native="showDeletModal = true; selecItem(cliente)"><md-icon>delete</md-icon></md-button>
-                    </md-table-row>
-                    </md-table-body>
-                </md-table>
-            </div>
-
-            <pre>{{ $data }}</pre>
-
-            <div class="modal" id="addModal" v-if="showAddModal">
-                <div class="modalContainer">
-                    <md-toolbar>
-                        <div class="md-toolbar-container">
-                            <h3 class="md-title">Novo {{ title }}</h3>
-                        </div>
-                    </md-toolbar>
-                    <div class="modalContent">
-                        <form novalidate @submit.stop.prevent="submit">
-                            <md-input-container>
-                                <label>Fantasia</label>
-                                <md-input type="text" v-model="fantasia"></md-input>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Nome</label>
-                                <md-input type="text" v-model="nome"></md-input>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Seguimento</label>
-                                <md-select v-model="seguimento">
-                                    <md-option value="bebida">Bebida</md-option>
-                                    <md-option value="industria">Industria</md-option>
-                                    <md-option value="saneamento">Saneamento</md-option>                                 
-                                    <md-option value="outro">Outro</md-option>
-                                </md-select>
-                            </md-input-container>
-                        </form>
+        <sidebar></sidebar>
+        <main>
+            <v-container fluid>
+                <div class="title">Click on sidebar to re-open.</div>
+                <v-card>
+                    <v-card-title>{{ title }}<v-spacer></v-spacer>
+                        <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
+                        <v-btn floating small class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
+                    </v-card-title>
+                    <v-data-table v-bind:headers="headers" v-bind:items="items" v-bind:search="search">
+                        <template slot="items" scope="props">
+                            <td>{{ props.item.fantasia }}</td>
+                            <td>{{ props.item.nome }}</td>
+                            <td>{{ props.item.seguimento }}</td>
+                            <td>
+                                <router-link :to="'/'+ props.item.type +'/' + props.item._id"><v-btn floating small class="green"><v-icon light>visibility</v-icon></v-btn></router-link>
+                                <v-btn floating small class="blue" @click.native="showModalEdt = true; selecItem(props.item)"><v-icon light>edit</v-icon></v-btn>
+                                <v-btn floating small class="red" @click.native="showModalDel = true; selecItem(props.item)"><v-icon light>delete</v-icon></v-btn>
+                            </td>
+                        </template>
+                        <template slot="pageText" scope="{ pageStart, pageStop }">
+                            From {{ pageStart }} to {{ pageStop }}
+                        </template>
+                    </v-data-table>
+                    <pre>{{ $data }}</pre>
+                    <div id="app">
+                        <!-- use the modal component, pass in the prop -->
+                        <modal-add @close="showModalAdd = false" @atualizar="itemModal" v-if="showModalAdd"  ></modal-add>
+                        <modal-edt @close="showModalEdt = false" @atualizar="itemModal" v-if="showModalEdt" :data="modalItem"></modal-edt>
+                        <modal-del @close="showModalDel = false" @atualizar="itemModal" v-if="showModalDel"  :data="modalItem"></modal-del>
                     </div>
-                    <div>
-                        <md-bottom-bar md-theme="teal">
-                            <md-bottom-bar-item md-icon="cancel" @click.native="showAddModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="save" @click.native="showAddModal = false; saveItem()">Salva</md-bottom-bar-item>
-                        </md-bottom-bar>
-                    </div>
-                </div>
-            </div>
-            <div class="modal" id="editModal" v-if="showEditModal">
-                <div class="modalContainer">
-                    <md-toolbar>
-                        <div class="md-toolbar-container">
-                            <h3 class="md-title">Editar {{ title }}</h3>
-                        </div>
-                    </md-toolbar>
-                    <div class="modalContent">
-                        <form novalidate @submit.stop.prevent="submit">
-                            <md-input-container>
-                                <label>Nome Fantasia</label>
-                                <md-input type="text" v-model="modalItem.fantasia"></md-input>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Nome</label>
-                                <md-input type="text" v-model="modalItem.nome"></md-input>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Seguimento</label>
-                                <md-input type="text" v-model="modalItem.seguimento"></md-input>
-                            </md-input-container>
-                        </form>
-                    </div>
-                    <div>
-                        <md-bottom-bar md-theme="teal">
-                            <md-bottom-bar-item md-icon="cancel" @click.native="showEditModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="save" @click.native="showEditModal = false; updateItem()">Salva</md-bottom-bar-item>
-                        </md-bottom-bar>
-                    </div>
-                </div>
-            </div>
-            <div class="modal" id="deletModal" v-if="showDeletModal">
-                <div class="modalContainer">
-                    <md-toolbar>
-                        <div class="md-toolbar-container">
-                            <h3 class="md-title">você tem certeza?</h3>
-                        </div>
-                    </md-toolbar>
-                    <div class="modalContent">
-                        <p>Você vai apagar '{{modalItem.nome}}'.</p>
-                    </div>
-                    <div>
-                        <md-bottom-bar md-theme="teal">
-                            <md-bottom-bar-item md-icon="cancel" @click.native="showDeletModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="delete" @click.native="showDeletModal = false; deleteItem()">Deletar</md-bottom-bar-item>
-                        </md-bottom-bar>
-                    </div>
-                </div>
-            </div>
-        </div>
+                </v-card>
+            </v-container>
+        </main>
     </div>
 </template>
 
 <script>
 
 import Sidebar from '../components/principal/Sidebar'
-
+import ModalAdd from '../components/cliente/add'
+import ModalEdt from '../components/cliente/edt'
+import ModalDel from '../components/cliente/del'
 export default {
-    //name: 'clientes',
-    components: { Sidebar },
+    //nome: '#user',
+    components: { Sidebar, ModalAdd, ModalEdt, ModalDel },
     data () {
         return {
-            title: 'Cliente',
-            showAddModal: false,
-            showEditModal: false,
-            showDeletModal: false,
-            errorMessage: '',
-            successMessage: '',
-            fantasia: '', nome: '', seguimento: '', cadastro: '',
-            modalItem: {},
-            clientes: []
+        title: 'Clientes',
+        showModalAdd: false, showModalEdt: false, showModalDel: false,
+        errorMessage: '', successMessage: '',
+        modalItem: {},
+        search: '',
+        pagination: {},
+        headers: [
+            { text: 'Nome Fantasia', left: true, value: 'fantasia' },
+            { text: 'Nome', value: 'nome'},
+            { text: 'Seguimento', value: 'seguimento' },
+            { text: 'Ação', value: 'acao' }
+        ],
+        items: []
         }
     },
     mounted: function(){
         console.log("bonina");
-        this.getAllItems();
-    },
-    props: {
-        cliente: Object
+        this.getAllUsers();
     },
     methods: {
-        getAllItems: function(){
-            this.$store.state.recaregarClientes(this, 'clientes')
+        getAllUsers: function(){
+            this.$store.state.recaregarClientes(this, 'items')
         },
-        saveItem: function(){
-            const data = {
-                'type': 'cliente',
-                'fantasia': this.fantasia,
-                'nome': this.nome,
-                'seguimento': this.seguimento,
-                'cadastro': new Date().toJSON()
-            }
-            this.$store.state.create(data).then(results => {
-                this.$store.state.recaregarClientes(this, 'clientes')
-            })
-            this.fantasia = ''
-            this.nome = ''
-            this.seguimento = ''
+        itemModal: function(){
+            this.$store.state.recaregarClientes(this, 'items'),
+            this.showModalAdd = false,
+            this.showModalEdt = false,
+            this.showModalDel = false,
+            console.log('teste')
         },
-        updateItem: function(){
-            this.$store.state.update(this.modalItem).then(results => {
-                this.$store.state.recaregarClientes(this, 'clientes')
-            })
-        },
-        deleteItem: function(){
-            const data = {
-                '_id': this.modalItem._id,
-                '_rev': this.modalItem._rev,
-            }
-            this.$store.state.delete(data).then(results => {
-                this.$store.state.recaregarClientes(this, 'clientes')
-            })
-        },
-        selecItem: function(item){
-            this.modalItem = item;
+        selecItem: function(data){
+            this.modalItem = data;
         },
         toFormData: function(obj){
             var form_data = new FormData();

@@ -130,10 +130,13 @@
 <script>
 
 import Sidebar from '../components/principal/Sidebar'
+import ModalAdd from '../components/cliente/add'
+import ModalEdt from '../components/cliente/edt'
+import ModalDel from '../components/cliente/del'
 
 export default {
     //name: 'clientes',
-    components: { Sidebar },
+    components: { Sidebar, ModalAdd, ModalEdt, ModalDel },
     data () {
         return {
             title: 'Cliente',

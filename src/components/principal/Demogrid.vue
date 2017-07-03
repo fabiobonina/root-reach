@@ -21,8 +21,8 @@
                 </td>
                 <td>
                 <md-button md-theme="brown" class="md-icon-button md-raised md-dense"><router-link :to="'/'+ entry.type +'/' + entry._id"><md-icon>visibility</md-icon></router-link></md-button>
-                <md-button class="md-icon-button md-raised md-primary md-dense" @click.native="showEditModal = true; selecItem(cliente)"><md-icon>edit</md-icon></md-button>
-                <md-button class="md-icon-button md-raised md-accent md-dense" @click.native="showDeletModal = true; selecItem(cliente)"><md-icon>delete</md-icon></md-button>
+                <md-button class="md-icon-button md-raised md-primary md-dense" @click.native="showModalEdt = true; selecItem(cliente)"><md-icon>edit</md-icon></md-button>
+                <md-button class="md-icon-button md-raised md-accent md-dense" @click.native="showModalDel = true; selecItem(cliente)"><md-icon>delete</md-icon></md-button>
                 </td>
             </tr>
         </tbody>

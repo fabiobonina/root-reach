@@ -7,31 +7,28 @@
                     <v-btn light icon @click.native="$emit('close')">
                         <v-icon>arrow_back</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Edtar {{ title }}</v-toolbar-title>
+                    <v-toolbar-title>Editar {{ title }}</v-toolbar-title>
                 </v-toolbar>
                 <template>
                     <v-flex xs12 md16 offset-md1>
                         <v-card>
                         <v-card-text>
                             <v-text-field class="mt-5" required
-                            label="Fantasia"
-                            v-model="modalItem.fantasia"
+                            label="Nome"
+                            v-model="modalItem.nome"
+                            hint="Nome completo"
                             ></v-text-field>
                             <v-text-field required
-                            label="Nome"
-                            hint="Nome completo"
-                            v-model="modalItem.nome"
+                            label="Usuario"
+                            v-model="modalItem.user"
                             ></v-text-field>
-                            <v-flex xs6>
-                                <v-select v-bind:items="states" required
-                                v-model="modalItem.seguimento"
-                                label="Seguimento"
-                                dark
-                                single-line
-                                auto
-                                ></v-select>
-                            </v-flex>
+                            <v-text-field required
+                            label="Email"
+                            v-model="modalItem.email"
+                            hint="email@exemplo.com"
+                            ></v-text-field>
                             <small>*campos obrigatório</small>
+                            <p>{{$data}}</p>
                         </v-card-text>
                         </v-card>
                     </v-flex>
@@ -60,7 +57,6 @@ export default {
         return {
             errors: [],
             title: 'Usuario',
-            states: ['Bebida','Industria','Saneamento','Outro'],
             modalItem: this.data
         }
     },
@@ -83,7 +79,7 @@ export default {
             this.$store.state.update(this.modalItem)
         },
         ehVazia () {
-            if(this.modalItem.fantasia.length == 0 || this.modalItem.nome.length == 0 || this.modalItem.seguimento.length == 0 ){
+            if(this.modalItem.user.length == 0 || this.modalItem.nome.length == 0 || this.modalItem.email.length == 0 ){
                 return true
             }
             return false

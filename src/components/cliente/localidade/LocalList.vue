@@ -1,185 +1,89 @@
 <template>
     <div>
-        <div>
-            <sidebar></sidebar>
-        </div>
-        <div>
-            <md-toolbar class="md-dense">
-                <h2 class="md-title" style="flex: 1">{{ title }}s</h2>
-                <md-button class="md-icon-button md-accent" @click.native="showAddModal = true">
-                    <md-icon>add</md-icon>
-                </md-button>
-            </md-toolbar>
-            <div>
-                <p class="successMessage" v-if="successMessage">{{ successMessage }}</p>
-                <p class="errorMessage" v-if="errorMessage">{{ errorMessage }}</p>
-                
-            </div>
+        <main>
+            <v-container fluid>
+                <v-card>
+                    <v-card-title>{{ title }}<v-spacer></v-spacer>
+                        <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
+                        <v-btn floating small class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
+                    </v-card-title>
+                    <v-data-table v-bind:headers="headers" v-bind:items="items" v-bind:search="search">
+                        <template slot="items" scope="props">
+                            <td>{{ props.item.fantasia }}</td>
+                            <td>{{ props.item.nome }}</td>
+                            <td>{{ props.item.seguimento }}</td>
+                            <td>
+                                <router-link :to="'/'+ props.item.type +'/' + props.item._id"><v-btn floating small class="green"><v-icon light>visibility</v-icon></v-btn></router-link>
+                                <v-btn floating small class="blue" @click.native="showModalEdt = true; selecItem(props.item)"><v-icon light>edit</v-icon></v-btn>
+                                <v-btn floating small class="red" @click.native="showModalDel = true; selecItem(props.item)"><v-icon light>delete</v-icon></v-btn>
+                            </td>
+                        </template>
+                        <template slot="pageText" scope="{ pageStart, pageStop }">
+                            From {{ pageStart }} to {{ pageStop }}
+                        </template>
+                    </v-data-table>
+                    <pre>{{ $data }}</pre>
+                    <div id="app">
+                        <!-- use the modal component, pass in the prop -->
+                        <modal-add @close="showModalAdd = false" @atualizar="itemModal" v-if="showModalAdd"  ></modal-add>
+                        <modal-edt @close="showModalEdt = false" @atualizar="itemModal" v-if="showModalEdt" :data="modalItem"></modal-edt>
+                        <modal-del @close="showModalDel = false" @atualizar="itemModal" v-if="showModalDel"  :data="modalItem"> </modal-del>
+                    </div>
+                    <pre>{{ $data }}</pre>
+                </v-card>
 
-            <pre>{{ $data }}</pre>
-
-            <div class="modal" id="addModal" v-if="showAddModal">
-                <div class="modalContainer">
-                    <md-toolbar>
-                        <div class="md-toolbar-container">
-                            <h3 class="md-title">Novo {{ title }}</h3>
-                        </div>
-                    </md-toolbar>
-                    <div class="modalContent">
-                        <form novalidate @submit.stop.prevent="submit">
-                            <md-input-container>
-                                <label>Nome</label>
-                                <md-input type="text" v-model="nome"></md-input>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Tipo</label>
-                                <md-select v-model="tipo">
-                                    <md-option value="CAPITAÇÃO">CAPITAÇÃO</md-option>
-                                    <md-option value="ELEVATORIA">ELEVATORIA</md-option>
-                                    <md-option value="ETA">ETA</md-option>
-                                    <md-option value="ETE">ETE</md-option>
-                                    <md-option value="INDUSTRIA">INDUSTRIA</md-option>
-                                    <md-option value="POÇO">POÇO</md-option>
-                                    <md-option value="OUTRO">OUTRO</md-option>
-                                </md-select>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Municipio</label>
-                                <md-input type="text" v-model="municipio"></md-input>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>UF</label>
-                                <md-input type="text" v-model="uf"></md-input>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Ativo</label>
-                                <md-input type="text" v-model="ativo"></md-input>
-                            </md-input-container>
-                        </form>
-                    </div>
-                    <div>
-                        <md-bottom-bar md-theme="teal">
-                            <md-bottom-bar-item md-icon="cancel" @click.native="showAddModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="save" @click.native="showAddModal = false; saveItem()">Salva</md-bottom-bar-item>
-                        </md-bottom-bar>
-                    </div>
-                </div>
-            </div>
-            <div class="modal" id="editModal" v-if="showEditModal">
-                <div class="modalContainer">
-                    <md-toolbar>
-                        <div class="md-toolbar-container">
-                            <h3 class="md-title">Editar {{ title }}</h3>
-                        </div>
-                    </md-toolbar>
-                    <div class="modalContent">
-                        <form novalidate @submit.stop.prevent="submit">
-                            <md-input-container>
-                                <label>Nome Fantasia</label>
-                                <md-input type="text" v-model="modalItem.fantasia"></md-input>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Nome</label>
-                                <md-input type="text" v-model="modalItem.nome"></md-input>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Seguimento</label>
-                                <md-input type="text" v-model="modalItem.seguimento"></md-input>
-                            </md-input-container>
-                        </form>
-                    </div>
-                    <div>
-                        <md-bottom-bar md-theme="teal">
-                            <md-bottom-bar-item md-icon="cancel" @click.native="showEditModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="save" @click.native="showEditModal = false; updateItem()">Salva</md-bottom-bar-item>
-                        </md-bottom-bar>
-                    </div>
-                </div>
-            </div>
-            <div class="modal" id="deletModal" v-if="showDeletModal">
-                <div class="modalContainer">
-                    <md-toolbar>
-                        <div class="md-toolbar-container">
-                            <h3 class="md-title">você tem certeza?</h3>
-                        </div>
-                    </md-toolbar>
-                    <div class="modalContent">
-                        <p>Você vai apagar '{{modalItem.nome}}'.</p>
-                    </div>
-                    <div>
-                        <md-bottom-bar md-theme="teal">
-                            <md-bottom-bar-item md-icon="cancel" @click.native="showDeletModal = false">Cancelar</md-bottom-bar-item>
-                            <md-bottom-bar-item md-icon="delete" @click.native="showDeletModal = false; deleteItem()">Deletar</md-bottom-bar-item>
-                        </md-bottom-bar>
-                    </div>
-                </div>
-            </div>
-        </div>
+            </v-container>
+        </main>
     </div>
 </template>
 
 <script>
-
-import Localtab from './LocalTab'
-
+import ModalAdd from './add'
+import ModalEdt from './edt'
+import ModalDel from './del'
 export default {
-    //name: 'clientes',
-    components: { Localtab },
+    //nome: '#user',
+    components: { ModalAdd, ModalEdt, ModalDel },
+    props: {
+        cliente: {}
+    },
     data () {
         return {
-            title: 'Localidade',
-            showAddModal: false,
-            showEditModal: false,
-            showDeletModal: false,
-            errorMessage: '',
-            successMessage: '',
-            clienteId: '', nome: '', seguimento: '', cadastro: '',
-            modalItem: {},
-            clientes: []
+        title: 'Localidades',
+        showModalAdd: false, showModalEdt: false, showModalDel: false,
+        errorMessage: '', successMessage: '',
+        modalItem: {},
+        cliente: this.cliente,
+        search: '',
+        pagination: {},
+        headers: [
+            { text: 'Nome Fantasia', left: true, value: 'fantasia' },
+            { text: 'Nome', value: 'nome'},
+            { text: 'Seguimento', value: 'seguimento' },
+            { text: 'Ação', value: 'acao' }
+        ],
+        items: []
         }
     },
     mounted: function(){
         console.log("bonina");
-        this.getAllItems();
-    },
-    props: {
-        cliente: Object
+        this.getAllUsers();
     },
     methods: {
-        getAllItems: function(){
-            this.$store.state.recaregarClientes(this, 'clientes')
-        },
-        saveItem: function(){
-            const data = {
-                'type': 'cliente',
-                'fantasia': this.fantasia,
-                'nome': this.nome,
-                'seguimento': this.seguimento,
-                'cadastro': new Date().toJSON()
-            }
-            this.$store.state.create(data).then(results => {
-                this.$store.state.recaregarClientes(this, 'clientes')
-            })
-            this.fantasia = ''
-            this.nome = ''
-            this.seguimento = ''
-        },
-        updateItem: function(){
-            this.$store.state.update(this.modalItem).then(results => {
-                this.$store.state.recaregarClientes(this, 'clientes')
+        getAllUsers: function(){
+            this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
+                this.items = localidades
             })
         },
-        deleteItem: function(){
-            const data = {
-                '_id': this.modalItem._id,
-                '_rev': this.modalItem._rev,
-            }
-            this.$store.state.delete(data).then(results => {
-                this.$store.state.recaregarClientes(this, 'clientes')
-            })
+        itemModal: function(){
+            this.$store.state.recaregarClientes(this, 'items'),
+            this.showModalAdd = false,
+            this.showModalEdt = false,
+            this.showModalDel = false,
+            console.log('teste')
         },
-        selecItem: function(item){
-            this.modalItem = item;
+        selecItem: function(data){
+            this.modalItem = data;
         },
         toFormData: function(obj){
             var form_data = new FormData();
@@ -194,8 +98,6 @@ export default {
         }
     },
 }
-
-
 </script>
 
 <style scoped>
@@ -207,23 +109,11 @@ export default {
     bottom: 0;
     background: rgba(0, 0, 0, 0.4);
 }
-
 .modalContainer{
     width: 555px;
     background: #FFFFFF;
     margin: auto;
     margin-top: 44px;
-}
-
-.modalHeading{
-    padding: 9px;
-    background: #06307c;
-    color: #FFFFFF;
-}
-
-.modalContent{
-    min-height: 333px;
-    padding: 44px;
 }
 p.successMessage{
     background: #D8EFC2;
@@ -239,6 +129,4 @@ p.errorMessage{
     padding: 9px;
     margin: 22px 0;
 }
-
-
 </style>

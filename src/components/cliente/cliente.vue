@@ -3,195 +3,77 @@
         <div>
             <sidebar></sidebar>
         </div>
-        <div id="app"class="phone-viewport">
-            <md-toolbar class="md-dense" md-theme="green">
-                <h3>{{ title }} > </h3>
-                <h3 class="md-title"> {{ cliente.fantasia }} | {{ cliente.nome }}</h3>
-            </md-toolbar>
-        </div>
-        <div>
-            <md-layout md-gutter>
-                <md-layout md-flex-xsmall="150" md-flex-small="75" md-flex-medium="50">
-                    <div class="phone-viewport">
-                        <md-toolbar class="md-dense">
-                            <md-icon class="md-primary">location_city</md-icon>
-                            <h2 class="md-title" style="flex: 1">{{ title2 }}s</h2>
-                            <md-button class="md-icon-button md-accent" @click.native="showAddModal = true">
-                                <md-icon>add</md-icon>
-                            </md-button>
-                        </md-toolbar>
-                        <md-list class="custom-list md-triple-line" v-for="item in localidades">
-                            <md-list-item>
-                            <md-icon class="md-primary">location_on</md-icon>
-
-                            <div class="md-list-text-container">
-                                <span>{{ item.nome }}</span>
-                                <p>{{ item.tipo }}</p>
-                                <p>{{ item.municipio }}/{{ item.uf }}</p>
-                            </div>
-                            <md-button md-theme="brown" class="md-icon-button md-raised md-dense"><router-link :to="'/cliente/' + item._id"><md-icon>visibility</md-icon></router-link></md-button>
-                            <md-menu md-size="4" md-direction="bottom left">
-                                <md-button class="md-icon-button" md-menu-trigger>
-                                    <md-icon>more_vert</md-icon>
-                                </md-button>
-                                <md-menu-content>
-                                    <md-menu-item @click.native="showEditModal = true; selecItem(item)">
-                                    <span>Editar</span>
-                                    <md-icon>edit</md-icon>
-                                    </md-menu-item>
-                                    <md-menu-item @click.native="showDeletModal = true; selecItem(item)">
-                                    <span>Deletar</span>
-                                    <md-icon>delete</md-icon>
-                                    </md-menu-item>
-                                </md-menu-content>
-                            </md-menu>
-                            
-                            </md-list-item>
-                            <md-divider class="md-inset"></md-divider>
-                            </md-list-item>
-                        </md-list>
-                    </div>
-                </md-layout>
-                <md-layout md-flex-xsmall="100" md-flex-small="50" md-flex-medium="33">
-                    <div class="modal" id="addModal" v-if="showAddModal">
-                        <div class="modalContainer">
-                            <md-toolbar>
-                                <div class="md-toolbar-container">
-                                    <h3 class="md-title">Novo {{ title }}</h3>
+        <main>
+            <v-container fluid>
+                
+                <div class="title">Click on sidebar to re-open.</div>
+                <v-card>
+                    <v-card-title> <h6> {{ title }}: {{ cliente.fantasia }} | {{ cliente.nome }}</h6><v-spacer></v-spacer>
+                        <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
+                        <v-btn floating small class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
+                    </v-card-title>
+                    <div>
+                        <local-list :cliente="cliente"></local-list>
+                        <md-layout md-gutter>
+                            <md-layout md-flex-xsmall="150" md-flex-small="75" md-flex-medium="50">
+                                <div class="phone-viewport">
+                                    <md-toolbar class="md-dense">
+                                        <md-icon class="md-primary">location_city</md-icon>
+                                        <h2 class="md-title" style="flex: 1">{{ title2 }}s</h2>
+                                        <md-button class="md-icon-button md-accent" @click.native="showAddModal = true">
+                                            <md-icon>add</md-icon>
+                                        </md-button>
+                                    </md-toolbar>
+                                    <md-list class="custom-list md-triple-line" v-for="item in localidades">
+                                        <md-list-item>
+                                        <md-icon class="md-primary">location_on</md-icon>
+                                        <div class="md-list-text-container">
+                                            <span>{{ item.nome }}</span>
+                                            <p>{{ item.tipo }}</p>
+                                            <p>{{ item.municipio }}/{{ item.uf }}</p>
+                                        </div>
+                                        <md-button md-theme="brown" class="md-icon-button md-raised md-dense"><router-link :to="'/cliente/' + item._id"><md-icon>visibility</md-icon></router-link></md-button>
+                                        <md-menu md-size="4" md-direction="bottom left">
+                                            <md-button class="md-icon-button" md-menu-trigger>
+                                                <md-icon>more_vert</md-icon>
+                                            </md-button>
+                                            <md-menu-content>
+                                                <md-menu-item @click.native="showEditModal = true; selecItem(item)">
+                                                <span>Editar</span>
+                                                <md-icon>edit</md-icon>
+                                                </md-menu-item>
+                                                <md-menu-item @click.native="showDeletModal = true; selecItem(item)">
+                                                <span>Deletar</span>
+                                                <md-icon>delete</md-icon>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                        </md-list-item>
+                                        <md-divider class="md-inset"></md-divider>
+                                        </md-list-item>
+                                    </md-list>
                                 </div>
-                            </md-toolbar>
-                            <div class="modalContent">
-                                <form novalidate @submit.stop.prevent="submit">
-                                    <md-input-container>
-                                        <label>Nome</label>
-                                        <md-input type="text" v-model="nome"></md-input>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>Tipo</label>
-                                        <md-select v-model="tipo">
-                                            <md-option value="CAPITAÇÃO">CAPITAÇÃO</md-option>
-                                            <md-option value="ELEVATORIA">ELEVATORIA</md-option>
-                                            <md-option value="ETA">ETA</md-option>
-                                            <md-option value="ETE">ETE</md-option>
-                                            <md-option value="INDUSTRIA">INDUSTRIA</md-option>
-                                            <md-option value="POÇO">POÇO</md-option>
-                                            <md-option value="OUTRO">OUTRO</md-option>
-                                        </md-select>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>Regional</label>
-                                        <md-input type="text" v-model="regional"></md-input>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>Municipio</label>
-                                        <md-input type="text" v-model="municipio"></md-input>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>UF</label>
-                                        <md-input type="text" v-model="uf"></md-input>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>Ativo</label>
-                                        <md-input type="text" v-model="ativo"></md-input>
-                                    </md-input-container>
-                                </form>
-                            </div>
-                            <div>
-                                <md-bottom-bar md-theme="teal">
-                                    <md-bottom-bar-item md-icon="cancel" @click.native="showAddModal = false">Cancelar</md-bottom-bar-item>
-                                    <md-bottom-bar-item md-icon="save" @click.native="showAddModal = false; saveItem()">Salva</md-bottom-bar-item>
-                                </md-bottom-bar>
-                            </div>
-                        </div>
+                            </md-layout>
+                            <md-layout md-flex-xsmall="100" md-flex-small="50" md-flex-medium="33">                    
+                            </md-layout>
+                            <md-layout>
+                                md-flex-medium="33"
+                            </md-layout>
+                        </md-layout>
                     </div>
-                    <div class="modal" id="editModal" v-if="showEditModal">
-                        <div class="modalContainer">
-                            <md-toolbar>
-                                <div class="md-toolbar-container">
-                                    <h3 class="md-title">Editar {{ title }}</h3>
-                                </div>
-                            </md-toolbar>
-                            <div class="modalContent">
-                                <form novalidate @submit.stop.prevent="submit">
-                                    <md-input-container>
-                                        <label>Nome</label>
-                                        <md-input type="text" v-model="modalItem.nome"></md-input>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>Tipo</label>
-                                        <md-select v-model="modalItem.tipo">
-                                            <md-option value="CAPITAÇÃO">CAPITAÇÃO</md-option>
-                                            <md-option value="ELEVATORIA">ELEVATORIA</md-option>
-                                            <md-option value="ETA">ETA</md-option>
-                                            <md-option value="ETE">ETE</md-option>
-                                            <md-option value="INDUSTRIA">INDUSTRIA</md-option>
-                                            <md-option value="POÇO">POÇO</md-option>
-                                            <md-option value="OUTRO">OUTRO</md-option>
-                                        </md-select>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>Regional</label>
-                                        <md-input type="text" v-model="modalItem.regional"></md-input>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>Municipio</label>
-                                        <md-input type="text" v-model="modalItem.municipio"></md-input>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>UF</label>
-                                        <md-input type="text" v-model="modalItem.uf"></md-input>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>Ativo</label>
-                                        <md-input type="text" v-model="modalItem.ativo"></md-input>
-                                    </md-input-container>
-                                </form>
-                            </div>
-                            <div>
-                                <md-bottom-bar md-theme="teal">
-                                    <md-bottom-bar-item md-icon="cancel" @click.native="showEditModal = false">Cancelar</md-bottom-bar-item>
-                                    <md-bottom-bar-item md-icon="save" @click.native="showEditModal = false; updateItem()">Salva</md-bottom-bar-item>
-                                </md-bottom-bar>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal" id="deletModal" v-if="showDeletModal">
-                        <div class="modalContainer">
-                            <md-toolbar>
-                                <div class="md-toolbar-container">
-                                    <h3 class="md-title">você tem certeza?</h3>
-                                </div>
-                            </md-toolbar>
-                            <div class="modalContent">
-                                <p>Você vai apagar '{{modalItem.nome}}'.</p>
-                            </div>
-                            <div>
-                                <md-bottom-bar md-theme="teal">
-                                    <md-bottom-bar-item md-icon="cancel" @click.native="showDeletModal = false">Cancelar</md-bottom-bar-item>
-                                    <md-bottom-bar-item md-icon="delete" @click.native="showDeletModal = false; deleteItem()">Deletar</md-bottom-bar-item>
-                                </md-bottom-bar>
-                            </div>
-                        </div>
-                    </div>
-                </md-layout>
-                <md-layout>
-                    md-flex-medium="33"
-                </md-layout>
-            </md-layout>
-
-            <pre>{{ $data }}</pre>
-            <pre>{{ $route.params.id }}</pre>
-        </div>
+                </v-card>
+            </v-container>
+        </main>
     </div>
 </template>
 
 <script>
 import Sidebar from '../principal/Sidebar'
-import Localidades from './localidade/Localidades'
+import LocalList from './localidade/LocalList'
 
 export default {
     //name: 'clientes',
-    components: { Sidebar, Localidades },
+    components: { Sidebar, LocalList },
     data () {
         return {
             title: 'Cliente', title2: 'Localidade',
@@ -225,33 +107,6 @@ export default {
             //this.$store.state.findLocalidadesByClienteId(cliente._id).then(comments =>{
             //this.comments = comments
             //})
-        },
-        saveItem: function(){
-            const data = {
-                'type': 'localidade',
-                'clienteId': this.cliente._id,
-                'clienteNome': this.cliente.fantasia,
-                'nome': this.nome,
-                'tipo': this.tipo,
-                'municipio': this.municipio,
-                'uf': this.uf,
-                'atendimento': '0',
-                'ativo': this.ativo,
-                'cadastro': new Date().toJSON()
-            }
-            this.$store.state.create(data).then(results => {
-                this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
-                    this.localidades = localidades
-                })
-                 //this.$store.state.recaregarlocalidades(this, 'localidades')
-            })
-            this.tipo = ''
-            this.nome = ''
-            this.regional = ''
-            this.municipio = ''
-            this.uf = ''
-            this.ativo = ''
-
         },
         updateItem: function(){
             this.$store.state.update(this.modalItem).then(results => {

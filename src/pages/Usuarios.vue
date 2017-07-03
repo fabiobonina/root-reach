@@ -5,129 +5,52 @@
             <v-container fluid>
                 <div class="title">Click on sidebar to re-open.</div>
                 <v-card>
-                    <v-card-title> Usuario <v-spacer></v-spacer>
-                    <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
-                        <v-btn floating small class="indigo" @click.native="showAddModal = true"><v-icon light>add</v-icon></v-btn>
+                    <v-card-title>{{ title }}<v-spacer></v-spacer>
+                        <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
+                        <v-btn floating small class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
                     </v-card-title>
                     <v-data-table v-bind:headers="headers" v-bind:items="items" v-bind:search="search">
-                    <template slot="items" scope="props">
-                        <td class="text-xs-right">{{ props.item.nome }}</td>
-                        <td class="text-xs-right">{{ props.item.user }}</td>
-                        <td class="text-xs-right">{{ props.item.email }}</td>
-                        <td class="text-xs-right">
-                            <v-btn floating small class="cyan" @click.native="showEditModal = true; selecUser(user)"><v-icon light>edit</v-icon></v-btn>
-                            <v-btn floating small class="deep-orange" @click.native="showDeletModal = true; selecUser(user)"><v-icon light>delete</v-icon></v-btn>
-                        </td>
-                    </template>
-                    <template slot="pageText" scope="{ pageStart, pageStop }">
-                        From {{ pageStart }} to {{ pageStop }}
-                    </template>
+                        <template slot="items" scope="props">
+                            <td class="text-xs-right">{{ props.item.nome }}</td>
+                            <td class="text-xs-right">{{ props.item.user }}</td>
+                            <td class="text-xs-right">{{ props.item.email }}</td>
+                            <td class="text-xs-right">
+                                <v-btn floating small class="blue" @click.native="showModalEdt = true; selecItem(props.item)"><v-icon light>edit</v-icon></v-btn>
+                                <v-btn floating small class="red" @click.native="showModalDel = true; selecItem(props.item)"><v-icon light>delete</v-icon></v-btn>
+                            </td>
+                        </template>
+                        <template slot="pageText" scope="{ pageStart, pageStop }">
+                            From {{ pageStart }} to {{ pageStop }}
+                        </template>
                     </v-data-table>
                     <pre>{{ $data }}</pre>
-                    <div class="modal" id="addModal" v-if="showAddModal">
-                        <div class="modalContainer">
-                            <md-toolbar>
-                                <div class="md-toolbar-container">
-                                    <h3 class="md-title">Novo Usuario</h3>
-                                </div>
-                            </md-toolbar>
-                            <div class="modalContent">
-                                <form novalidate @submit.stop.prevent="submit">
-                                    <md-input-container>
-                                        <label>Nome</label>
-                                        <md-input type="text" v-model="nome"></md-input>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>Usuario</label>
-                                        <md-input type="text" v-model="user"></md-input>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>Email</label>
-                                        <md-input type="text" v-model="email"></md-input>
-                                    </md-input-container>
-                                </form>
-                            </div>
-                            <div>
-                                <md-bottom-bar md-theme="teal">
-                                    <md-bottom-bar-item md-icon="cancel" @click.native="showAddModal = false">Cancelar</md-bottom-bar-item>
-                                    <md-bottom-bar-item md-icon="save" @click.native="showingAddModal = false; saveUser()">Salva</md-bottom-bar-item>
-                                </md-bottom-bar>
-                            </div>
-                        </div>
+                    <div id="app">
+                        <!-- use the modal component, pass in the prop -->
+                        <modal-add v-if="showModalAdd" @atualizar="itemModal" @close="showModalAdd = false"></modal-add>
+                        <modal-edt :data="modalItem" v-if="showModalEdt" @atualizar="itemModal" @close="showModalEdt = false"></modal-edt>
+                        <modal-del :data="modalItem" v-if="showModalDel" @atualizar="itemModal" @close="showModalDel = false"></modal-del>
                     </div>
-                    <div class="modal" id="editModal" v-if="showingEditModal">
-                        <div class="modalContainer">
-                            <md-toolbar>
-                                <div class="md-toolbar-container">
-                                    <h3 class="md-title">Editar Usuario</h3>
-                                </div>
-                            </md-toolbar>
-                            <div class="modalContent">
-                                <form novalidate @submit.stop.prevent="submit">
-                                    <md-input-container>
-                                        <label>Nome</label>
-                                        <md-input type="text" v-model="modalUser.nome"></md-input>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>Usuario</label>
-                                        <md-input type="text" v-model="modalUser.user"></md-input>
-                                    </md-input-container>
-                                    <md-input-container>
-                                        <label>Email</label>
-                                        <md-input type="text" v-model="modalUser.email"></md-input>
-                                    </md-input-container>
-                                </form>
-                            </div>
-                            <div>
-                                <md-bottom-bar md-theme="teal">
-                                    <md-bottom-bar-item md-icon="cancel" @click.native="showingEditModal = false">Cancelar</md-bottom-bar-item>
-                                    <md-bottom-bar-item md-icon="save" @click.native="showingEditModal = false; updateUser()">Salva</md-bottom-bar-item>
-                                </md-bottom-bar>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal" id="deletModal" v-if="showingDeletModal">
-                        <div class="modalContainer">
-                            <md-toolbar>
-                                <div class="md-toolbar-container">
-                                    <h3 class="md-title">você tem certeza?</h3>
-                                </div>
-                            </md-toolbar>
-                            <div class="modalContent">
-                                <p>Você vai apagar '{{modalUser.nome}}'.</p>
-                            </div>
-                            <div>
-                                <md-bottom-bar md-theme="teal">
-                                    <md-bottom-bar-item md-icon="cancel" @click.native="showingDeletModal = false">Cancelar</md-bottom-bar-item>
-                                    <md-bottom-bar-item md-icon="delete" @click.native="showingDeletModal = false; deleteUser()">Deletar</md-bottom-bar-item>
-                                </md-bottom-bar>
-                            </div>
-                        </div>
-                    </div>
-  </v-card>
-  </v-container>
+                </v-card>
+            </v-container>
         </main>
-        </div>
+    </div>
 </template>
-
 
 <script>
 
 import Sidebar from '../components/principal/Sidebar'
-
+import ModalAdd from '../components/user/add'
+import ModalEdt from '../components/user/edt'
+import ModalDel from '../components/user/del'
 export default {
     //nome: '#user',
-    components: { Sidebar },
+    components: { Sidebar, ModalAdd, ModalEdt, ModalDel },
     data () {
         return {
-        showAddModal: false,
-        showEditModal: false,
-        showDeletModal: false,
-        errorMessage: '',
-        successMessage: '',
-        nome: '', email: '', user: '', dataCad: '', type: '',
-        modalUser: {},
-        users: [],
+        title: 'Usuarios',
+        showModalAdd: false, showModalEdt: false, showModalDel: false,
+        errorMessage: '', successMessage: '',
+        modalItem: {},
         search: '',
         pagination: {},
         headers: [
@@ -147,37 +70,15 @@ export default {
         getAllUsers: function(){
             this.$store.state.recaregarUsers(this, 'items')
         },
-        saveUser: function(){
-            const data = {
-                'type': 'user',
-                'nome': this.nome,
-                'email': this.email,
-                'user': this.user,
-                'dataCad': new Date().toJSON()
-            }
-            this.$store.state.create(data).then(results => {
-                this.$store.state.recaregarUsers(this, 'items')
-            })
-            this.nome = ''
-            this.email = ''
-            this.user = ''
+        itemModal: function(){
+            this.$store.state.recaregarUsers(this, 'items'),
+            this.showModalAdd = false,
+            this.showModalEdt = false,
+            this.showModalDel = false,
+            console.log('teste')
         },
-        updateUser: function(){
-            this.$store.state.update(this.modalUser).then(results => {
-                this.$store.state.recaregarUsers(this, 'items')
-            })
-        },
-        deleteUser: function(){
-            const data = {
-                '_id': this.modalUser._id,
-                '_rev': this.modalUser._rev,
-            }
-            this.$store.state.delete(data).then(results => {
-                this.$store.state.recaregarUsers(this, 'users')
-            })
-        },
-        selecUser: function(user){
-            this.modalUser = user;
+        selecItem: function(data){
+            this.modalItem = data;
         },
         toFormData: function(obj){
             var form_data = new FormData();
