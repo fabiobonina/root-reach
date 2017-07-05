@@ -33,11 +33,11 @@
 
 <script>
 import Sidebar from '../principal/Sidebar'
-
+import LocalList from './localidade/LocalList'
 
 export default {
     //name: 'clientes',
-    components: { Sidebar },
+    components: { Sidebar, LocalList },
     data () {
         return {
             title: 'Cliente',
@@ -49,10 +49,9 @@ export default {
         console.log("bonina");
         //console.log(this.$route.params.id);
         //this.id = this.$route.params.id;
-        this.getAllItems();
     },
     beforeCreate: function() {
-         
+         this.getAllItems();
     },
     methods: {
         getAllItems: function(){
