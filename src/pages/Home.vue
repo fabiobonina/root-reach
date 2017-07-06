@@ -1,5 +1,5 @@
 <template>
-    <body id="demo">
+    <div>
         <sidebar></sidebar>
         <main>
             <v-container fluid>
@@ -7,39 +7,28 @@
                     <div>
                         <v-card>
                             <v-card-title>
-                                Clientes
+                                {{ title }}
                                 <v-spacer></v-spacer>
                                 <v-text-field append-icon="search" label="Search" single-line hide-details v-model="searchQuery"></v-text-field>
+                                <v-btn floating small class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
                             </v-card-title>
                             <demogrid
                                 :data="gridData"
-                                :columns="gridColumns"
-                                :filter-key="searchQuery">
+                                :columns="gridColumns">
                             </demogrid>
                         </v-card>
                     </div>
 
-                    <div id="app">
-                        <button id="show-modal" @click="showModalAdd = true">Show Modal</button>
+                    <div>
                         <!-- use the modal component, pass in the prop -->
-                        <modal-add v-if="showModalAdd" @atualizar="itemModal" @close="showModalAdd = false">
-                            <!--
-                            you can use custom content here to overwrite
-                            default content
-                            -->
-                            <h3 slot="header">custom header</h3>
-                        </modal-add>
-                        <modal-edt v-if="showModalEdt" @atualizar="itemModal" @close="showModalEdt = false">
-                            <h3 slot="header">custom header</h3>
-                        </modal-edt>
-                        <modal-del v-if="showModalDel" @atualizar="itemModal" @close="showModalDel = false">
-                            <h3 slot="header">custom header</h3>
-                        </modal-del>
+                        <modal-add v-if="showModalAdd" @atualizar="itemModal" @close="showModalAdd = false"></modal-add>
+                        <modal-edt v-if="showModalEdt" @atualizar="itemModal" @close="showModalEdt = false"></modal-edt>
+                        <modal-del v-if="showModalDel" @atualizar="itemModal" @close="showModalDel = false"></modal-del>
                     </div>
                     <pre>{{ $data }}</pre>
             </v-container>
         </main>
-    </body>
+    </div>
 
 </template>
 
@@ -57,6 +46,7 @@ export default {
     components: { Sidebar, Demogrid, ModalAdd, ModalEdt, ModalDel },
     data () {
         return {
+            title: 'Clientes',
             searchQuery: '',
             gridColumns: ['fantasia', 'nome', 'seguimento'],
             gridData: [],
@@ -84,10 +74,5 @@ export default {
 }
 </script>
 
-<style scoped>
-body {
-  font-family: Helvetica Neue, Arial, sans-serif;
-  font-size: 14px;
-  color: #444;
-}
+<style>
 </style>

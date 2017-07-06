@@ -1,5 +1,5 @@
 <template>
-  <v-app id="example-2">
+  <div>
     <v-navigation-drawer temporary v-model="drawer" :mini-variant.sync="mini" light>
       <v-list class="pa-0">
         <v-list-item>
@@ -67,14 +67,13 @@
       <v-toolbar-side-icon light @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Toolbar</v-toolbar-title>
     </v-toolbar>
-  </v-app>
+  </div>
 </template>
 
 
 <script>
 
 export default {
-    name: 'app',
     components: {
     },
     computed: {

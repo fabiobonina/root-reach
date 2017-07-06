@@ -3,21 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import VueMaterial from 'vue-material'
-import 'vue-material/dist/vue-material.css'
 import store from './store/store'
 import Vuetify from 'vuetify'
  
 Vue.use(Vuetify)
-
-Vue.use(VueMaterial)
-
-Vue.material.registerTheme('default', {
-  primary: 'cyan',
-  accent: 'red',
-  warn: 'red',
-  background: 'white'
-})
 
 Vue.config.productionTip = false
 

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-app standalone>
         <sidebar></sidebar>
         <main>
             <v-container fluid>
@@ -34,7 +34,7 @@
                 </v-card>
             </v-container>
         </main>
-    </div>
+    </v-app>
 </template>
 
 <script>
@@ -107,23 +107,11 @@ export default {
     bottom: 0;
     background: rgba(0, 0, 0, 0.4);
 }
-
 .modalContainer{
     width: 555px;
     background: #FFFFFF;
     margin: auto;
     margin-top: 44px;
-}
-
-.modalHeading{
-    padding: 9px;
-    background: #06307c;
-    color: #FFFFFF;
-}
-
-.modalContent{
-    min-height: 333px;
-    padding: 44px;
 }
 p.successMessage{
     background: #D8EFC2;

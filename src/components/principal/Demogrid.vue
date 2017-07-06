@@ -1,34 +1,27 @@
 <template>
-    <div id="grid-template">
-        <table>
-            <thead>
-            <tr>
-                <th v-for="key in columns"
-                @click="sortBy(key)"
-                :class="{ active: sortKey == key }">
-                {{ key | capitalize }}
-                <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-                </span>
-                </th>
-                <th>&nbsp;</th>
-            </tr>
-            
-        </thead>
-        <tbody>
-            <tr v-for="entry in filteredData">
-                <td v-for="key in columns">
-                {{entry[key]}}
-                </td>
-                <td>
-                <md-button md-theme="brown" class="md-icon-button md-raised md-dense"><router-link :to="'/'+ entry.type +'/' + entry._id"><md-icon>visibility</md-icon></router-link></md-button>
-                <md-button class="md-icon-button md-raised md-primary md-dense" @click.native="showModalEdt = true; selecItem(cliente)"><md-icon>edit</md-icon></md-button>
-                <md-button class="md-icon-button md-raised md-accent md-dense" @click.native="showModalDel = true; selecItem(cliente)"><md-icon>delete</md-icon></md-button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-  </div>
-
+  <v-layout row>
+    <v-flex xs12 sm6 offset-sm3>
+      <v-card>
+        <v-card-title class="white--text blue" dark>{{ title }}<v-spacer></v-spacer>
+          <v-text-field append-icon="search" label="Search" single-line hide-details v-model.key="filterKey"></v-text-field>
+        </v-card-title>
+        <v-list two-line>
+          <v-list-tile avatar ripple v-for="(item, index) in items" v-bind:key="item.title">
+            <v-list-tile-content>
+              <v-list-tile-title>{{ item.fantasia }}</v-list-tile-title>
+              <v-list-tile-sub-title class="grey--text text--darken-4">{{ item.nome }}</v-list-tile-sub-title>
+              <v-list-tile-sub-title>{{ item.seguimento }}</v-list-tile-sub-title>
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-list-tile-action-text>{{ item.action }}</v-list-tile-action-text>
+              <v-icon class="grey--text text--lighten-1">star_border</v-icon>
+            </v-list-tile-action>
+            <v-divider v-if="index + 1 < items.length"></v-divider>
+          </v-list-tile>
+        </v-list>
+      </v-card>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
@@ -38,8 +31,7 @@ export default {
   nome: 'grid-template',
   props: {
     data: Array,
-    columns: Array,
-    filterKey: String
+    columns: Array
   },
   data: function () {
     var sortOrders = {}
@@ -48,27 +40,20 @@ export default {
     })
     return {
       sortKey: '',
-      sortOrders: sortOrders
+      title: 'Cliente',
+      filterKey: ''
     }
   },
   computed: {
-    filteredData: function () {
+    items: function () {
       var sortKey = this.sortKey
       var filterKey = this.filterKey && this.filterKey.toLowerCase()
-      var order = this.sortOrders[sortKey] || 1
       var data = this.data
       if (filterKey) {
         data = data.filter(function (row) {
           return Object.keys(row).some(function (key) {
             return String(row[key]).toLowerCase().indexOf(filterKey) > -1
           })
-        })
-      }
-      if (sortKey) {
-        data = data.slice().sort(function (a, b) {
-          a = a[sortKey]
-          b = b[sortKey]
-          return (a === b ? 0 : a > b ? 1 : -1) * order
         })
       }
       return data
@@ -80,69 +65,9 @@ export default {
     }
   },
   methods: {
-    sortBy: function (key) {
-      this.sortKey = key
-      this.sortOrders[key] = this.sortOrders[key] * -1
-    }
   }
 }
 </script>
 
 <style scoped>
-
-table {
-  border: 2px solid #42b983;
-  border-radius: 3px;
-  background-color: #fff;
-}
-th {
-  background-color: #42b983;
-  color: rgba(255,255,255,0.66);
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-td {
-  background-color: #f9f9f9;
-}
-
-th, td {
-  min-width: 120px;
-  padding: 10px 20px;
-}
-
-th.active {
-  color: #fff;
-}
-
-th.active .arrow {
-  opacity: 1;
-}
-
-.arrow {
-  display: inline-block;
-  vertical-align: middle;
-  width: 0;
-  height: 0;
-  margin-left: 5px;
-  opacity: 0.66;
-}
-
-.arrow.asc {
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-bottom: 4px solid #fff;
-}
-
-.arrow.dsc {
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 4px solid #fff;
-}
-
-
-
 </style>

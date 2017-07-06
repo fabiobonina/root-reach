@@ -1,10 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import Hello from '@/components/Hello'
-import Cliente from '@/components/cliente/Cliente'
-import LocalList from '@/components/cliente/localidade/LocalList'
-import Usuarios from '@/pages/Usuarios'
+import Bens from '@/pages/Bens'
+import BemList from '@/components/bem/List'
 import Clientes from '@/pages/Clientes'
+import Cliente from '@/components/cliente/Cliente'
+import Localidades from '@/pages/Localidades'
+import LocalList from '@/components/cliente/localidade/List'
+import LocalView from '@/components/cliente/localidade/View'
+import Usuarios from '@/pages/Usuarios'
 import Home from '@/pages/Home'
 
 Vue.use(Router)
@@ -14,11 +19,17 @@ export default new Router({
     { path: '/', name: 'Home', component: Home },
     { path: '/Usuarios', name: 'Usuarios', component: Usuarios },
     { path: '/hello', name: 'Hello', component: Hello },
-    { path: '/clientes', name: 'Clientes', component: Clientes},
-    { path: '/cliente/:id', name: 'Cliente', component: Cliente, children: [
+    { path: '/clientes', component: Clientes},
+    { path: '/cliente/:id', component: Cliente, children: [
         {path: '', components: {
             default: LocalList,
-        }, name:'cliente'},
-    ] },
+        }, name:'Cliente'},
+    ]},
+    { path: '/localidades', component: Localidades, name:'Localidades'},
+    { path: '/localidade/:id', component: LocalView, children: [
+        {path: '', components: {
+            default: BemList,
+        }, name:'Localidade'},
+    ]},
   ]
 })
