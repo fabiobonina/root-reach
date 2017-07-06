@@ -10,6 +10,6 @@ export default {
 }
 </script>
 
-<style lang="stylus" 
-  @import './stylus/main'
+<style lang="stylus"
+  @import './stylus/main'>
 </style>

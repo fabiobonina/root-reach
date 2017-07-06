@@ -12,9 +12,7 @@
                                 <v-text-field append-icon="search" label="Search" single-line hide-details v-model="searchQuery"></v-text-field>
                                 <v-btn floating small class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
                             </v-card-title>
-                            <demogrid
-                                :data="gridData"
-                                :columns="gridColumns">
+                            <demogrid :data="gridData">
                             </demogrid>
                         </v-card>
                     </div>
@@ -48,7 +46,6 @@ export default {
         return {
             title: 'Clientes',
             searchQuery: '',
-            gridColumns: ['fantasia', 'nome', 'seguimento'],
             gridData: [],
             showModalAdd: false,
             showModalEdt: false,

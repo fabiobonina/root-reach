@@ -91,6 +91,8 @@ export default {
                     'fantasia': this.fantasia,
                     'nome': this.nome,
                     'seguimento': this.seguimento,
+                    'lat': '',
+                    'long': '',
                     'cadastro': new Date().toJSON()
                 }
                 this.$store.state.create(data)

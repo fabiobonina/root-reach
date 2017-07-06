@@ -1,12 +1,12 @@
 <template>
-    <v-app>
+    <div>
         <div>
             <sidebar></sidebar>
         </div>
         <main>
             <v-container fluid>
                 
-                <div class="title">Click on sidebar to re-open.</div>
+                <div class="title">Click on sidebar to re-open.</div><br/>
                 <v-card>
                     <v-card-title>
                         <h6>{{ title }}: {{ cliente.fantasia }} | {{ cliente.nome }}</h6>
@@ -28,7 +28,7 @@
                 </v-card>
             </v-container>
         </main>
-    </v-app>
+    </div>
 </template>
 
 <script>
@@ -86,7 +86,6 @@ export default {
             this.errorMessage = '';
             this.successMessage = '';
         }
-        
     },
 }
 
@@ -109,17 +108,6 @@ export default {
     margin: auto;
     margin-top: 0px;
 }
-
-.modalHeading{
-    padding: 9px;
-    background: #06307c;
-    color: #FFFFFF;
-}
-
-.modalContent{
-    min-height: 333px;
-    padding: 44px;
-}
 p.successMessage{
     background: #D8EFC2;
     color: #097133;
@@ -134,6 +122,4 @@ p.errorMessage{
     padding: 9px;
     margin: 22px 0;
 }
-
-
 </style>

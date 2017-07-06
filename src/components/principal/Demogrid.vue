@@ -31,22 +31,15 @@ export default {
   nome: 'grid-template',
   props: {
     data: Array,
-    columns: Array
   },
   data: function () {
-    var sortOrders = {}
-    this.columns.forEach(function (key) {
-      sortOrders[key] = 1
-    })
     return {
-      sortKey: '',
       title: 'Cliente',
       filterKey: ''
     }
   },
   computed: {
     items: function () {
-      var sortKey = this.sortKey
       var filterKey = this.filterKey && this.filterKey.toLowerCase()
       var data = this.data
       if (filterKey) {
@@ -57,11 +50,6 @@ export default {
         })
       }
       return data
-    }
-  },
-  filters: {
-    capitalize: function (str) {
-      return str.charAt(0).toUpperCase() + str.slice(1)
     }
   },
   methods: {
