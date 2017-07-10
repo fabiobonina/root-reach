@@ -2,32 +2,7 @@
     <div>
         <main>
             <v-container fluid>
-                <v-layout row>
-                    <v-flex xs12 sm6 offset-sm3>
-                        <v-card>
-                            <v-card-title class="white--text blue" dark>{{ title }}<v-spacer></v-spacer>
-                            <v-text-field append-icon="search" label="Search" single-line hide-details v-model.key="filterKey"></v-text-field>
-                            </v-card-title>
-                            <v-list two-line>
-                            <v-list-tile avatar ripple v-for="(item, index) in itemsFiltros" v-bind:key="item.title" :href="'#/'+item.type+'/' + item._id">
-                                <v-list-tile-content>
-                                <v-list-tile-title>{{ item.nome }}</v-list-tile-title>
-                                <v-list-tile-sub-title class="grey--text text--darken-4">{{ item.municipio }}/ {{ item.uf }}</v-list-tile-sub-title>
-                                <v-list-tile-sub-title>{{ item.seguimento }}</v-list-tile-sub-title>
-                                </v-list-tile-content>
-                                <v-list-tile-action>
-                                <v-list-tile-action-text>{{ item.tipo }}</v-list-tile-action-text>
-                                <a v-if=" 1 < item.lat.length" :href="'https://maps.google.com/maps?q='+ item.lat + '%2C' + item.long" target="_blank"><v-icon class="blue--text text--lighten-1">near_me</v-icon></a>
-                                <v-icon class="grey--text text--lighten-1" v-if=" 1 > item.lat.length" >location_off</v-icon>
-                                </v-list-tile-action>
-                                <v-divider v-if="index + 1 < items.length"></v-divider>
-                            </v-list-tile>
-                            </v-list>
-                        </v-card>
-                    </v-flex>
-                </v-layout>
-
-
+                <v-card>
                     <v-card-title>{{ title }}<v-spacer></v-spacer>
                         <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
                         <v-btn floating small class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
@@ -59,22 +34,22 @@
 
             </v-container>
         </main>
+
     </div>
 </template>
 
 
 <script>
-import ModalAdd from './add'
-import ModalEdt from './edt'
-import ModalDel from './del'
+import ModalAdd from './_add'
+import ModalEdt from './_edt'
+import ModalDel from './_del'
 export default {
     //nome: '#user',
     components: { ModalAdd, ModalEdt, ModalDel },
     data () {
         return {
-            title: 'Localidades',
+            title: 'Bens',
             showModalAdd: false, showModalEdt: false, showModalDel: false,
-            filterKey: '',
             modalItem: {},
             cliente: '',
             items: [],
@@ -100,20 +75,6 @@ export default {
                 })
         })
 
-    },
-    computed: {
-        itemsFiltros: function () {
-        var filterKey = this.filterKey && this.filterKey.toLowerCase()
-        var data = this.items
-        if (filterKey) {
-            data = data.filter(function (row) {
-            return Object.keys(row).some(function (key) {
-                return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-            })
-            })
-        }
-        return data
-        }
     },
     mounted: function(){
         console.log("bonina");     

@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app">
+  <v-app id="app" standalone>
     <router-view></router-view>
   </v-app>
 </template>

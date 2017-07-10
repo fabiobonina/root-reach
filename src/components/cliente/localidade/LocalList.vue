@@ -1,17 +1,39 @@
 <template>
-    <v-app standalone>
-        <sidebar></sidebar>
+    <div>
         <main>
             <v-container fluid>
-                <div class="title">Click on sidebar to re-open.</div>
-                <v-card>
-                    <v-card-title><v-icon large v-badge="{ value:  '1', left: true}" class="grey--text text--lighten-1">location_city</v-icon>{{ title }} <v-spacer></v-spacer>
+                <v-layout row>
+                    <v-flex xs12 sm6 offset-sm3>
+                        <v-card>
+                            <v-card-title class="white--text blue" dark>{{ title }}<v-spacer></v-spacer>
+                            <v-text-field append-icon="search" label="Search" single-line hide-details v-model.key="filterKey"></v-text-field>
+                            </v-card-title>
+                            <v-list two-line>
+                            <v-list-tile avatar ripple v-for="(item, index) in itemsFiltros" v-bind:key="item.title" :href="'#/'+item.type+'/' + item._id">
+                                <v-list-tile-content>
+                                <v-list-tile-title>{{ item.nome }}</v-list-tile-title>
+                                <v-list-tile-sub-title class="grey--text text--darken-4">{{ item.municipio }}/ {{ item.uf }}</v-list-tile-sub-title>
+                                <v-list-tile-sub-title>{{ item.seguimento }}</v-list-tile-sub-title>
+                                </v-list-tile-content>
+                                <v-list-tile-action>
+                                <v-list-tile-action-text>{{ item.tipo }}</v-list-tile-action-text>
+                                <a v-if=" 1 < item.lat.length" :href="'https://maps.google.com/maps?q='+ item.lat + '%2C' + item.long" target="_blank"><v-icon class="blue--text text--lighten-1">near_me</v-icon></a>
+                                <v-icon class="grey--text text--lighten-1" v-if=" 1 > item.lat.length" >location_off</v-icon>
+                                </v-list-tile-action>
+                                <v-divider v-if="index + 1 < items.length"></v-divider>
+                            </v-list-tile>
+                            </v-list>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+
+
+                    <v-card-title>{{ title }}<v-spacer></v-spacer>
                         <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
                         <v-btn floating small class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
                     </v-card-title>
                     <v-data-table v-bind:headers="headers" v-bind:items="items" v-bind:search="search">
                         <template slot="items" scope="props">
-                            <td>{{ props.item.clienteNome }}</td>
                             <td>{{ props.item.tipo }}</td>
                             <td>{{ props.item.nome }}</td>
                             <td>{{ props.item.municipio }}</td>
@@ -37,30 +59,28 @@
 
             </v-container>
         </main>
-
-    </v-app>
+    </div>
 </template>
 
 
 <script>
-import Sidebar from '../components/principal/Sidebar'
-import ModalAdd from '../components/cliente/localidade/_add'
-import ModalEdt from '../components/cliente/localidade/_edt'
-import ModalDel from '../components/cliente/localidade/_del'
+import ModalAdd from './_add'
+import ModalEdt from './_edt'
+import ModalDel from './_del'
 export default {
     //nome: '#user',
-    components: { Sidebar, ModalAdd, ModalEdt, ModalDel },
+    components: { ModalAdd, ModalEdt, ModalDel },
     data () {
         return {
             title: 'Localidades',
             showModalAdd: false, showModalEdt: false, showModalDel: false,
+            filterKey: '',
             modalItem: {},
             cliente: '',
             items: [],
             search: '',
             pagination: {},
             headers: [
-                { text: 'Cliente', left: true, value: 'clienteNome' },
                 { text: 'Tipo', left: true, value: 'tipo' },
                 { text: 'Nome', value: 'nome'},
                 { text: 'municipio', value: 'municipio' },
@@ -73,18 +93,30 @@ export default {
         // sempre que a pergunta mudar, essa função será executada
     },
     beforeCreate: function() {
-	    this.$store.state.recaregarLocalidades(this, 'items')
+	    this.$store.state.findClienteById(this.$route.params.id).then(cliente => {
+                this.$store.state.findLocalidadesByClienteId(this.$route.params.id).then(localidades => {
+                    this.cliente = cliente
+                    this.items = localidades
+                })
+        })
+
     },
     mounted: function(){
-        console.log("bonina");     
-
+        console.log("bonina");
     },    
     methods: {
         getAllUsers: function(){
-            this.$store.state.recaregarLocalidades(this, 'items')
+            this.$store.state.findClienteById(this.$route.params.id).then(cliente => {
+                this.$store.state.findLocalidadesByClienteId(this.$route.params.id).then(localidades => {
+                    this.cliente = cliente
+                    this.items = localidades
+                })
+            })
         },
         itemModal: function(){
-            this.$store.state.recaregarLocalidades(this, 'items'),
+            this.$store.state.findLocalidadesByClienteId(this.$route.params.id).then(localidades => {
+                this.items = localidades
+            }),
             this.showModalAdd = false,
             this.showModalEdt = false,
             this.showModalDel = false,

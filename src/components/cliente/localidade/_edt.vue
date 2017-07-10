@@ -4,7 +4,7 @@
         <div class="modal">
             <div class="modalContainer">
                 <v-toolbar class="blue" light>
-                    <v-btn light icon @click.native="$emit('close')">
+                    <v-btn light icon @click.native="$emit('atualizar')">
                         <v-icon>arrow_back</v-icon>
                     </v-btn>
                     <v-toolbar-title>Edtar {{ title }}</v-toolbar-title>
@@ -13,24 +13,32 @@
                     <v-flex xs12 md16 offset-md1>
                         <v-card>
                         <v-card-text>
-                            <v-text-field class="mt-5" required
-                            label="Fantasia"
-                            v-model="modalItem.fantasia"
-                            ></v-text-field>
-                            <v-text-field required
-                            label="Nome"
-                            hint="Nome completo"
-                            v-model="modalItem.nome"
-                            ></v-text-field>
                             <v-flex xs6>
-                                <v-select v-bind:items="states" required
-                                v-model="modalItem.seguimento"
-                                label="Seguimento"
-                                dark
+                                <v-select
+                                v-bind:items="states"
+                                v-model="modalItem.tipo"
+                                label="Tipo"
                                 single-line
-                                auto
+                                bottom
+                                required
                                 ></v-select>
                             </v-flex>
+                            <v-text-field required
+                            label="Nome"
+                            v-model="modalItem.nome"
+                            ></v-text-field>
+                            <v-text-field
+                            label="Regional"
+                            v-model="modalItem.regional"
+                            ></v-text-field>
+                            <v-text-field required
+                            label="municipio"
+                            v-model="modalItem.municipio"
+                            ></v-text-field>
+                            <v-text-field required hint="Exemplo: PE"
+                            label="UF"
+                            v-model="modalItem.uf"
+                            ></v-text-field>
                             <small>*campos obrigatório</small>
                         </v-card-text>
                         </v-card>
@@ -44,6 +52,7 @@
                         </v-btn>
                     </v-toolbar-title>
                 </v-toolbar>
+                <pre>{{ $data }}</pre>
             </div>
         </div>
     </transition>
@@ -60,7 +69,7 @@ export default {
         return {
             errors: [],
             title: 'Usuario',
-            states: ['Bebida','Industria','Saneamento','Outro'],
+            states: ['Capitação','Elevatoria','ETA','ETE','Industria','Poço','Outro'],
             modalItem: this.data
         }
     },
@@ -83,7 +92,7 @@ export default {
             this.$store.state.update(this.modalItem)
         },
         ehVazia () {
-            if(this.modalItem.fantasia.length == 0 || this.modalItem.nome.length == 0 || this.modalItem.seguimento.length == 0 ){
+            if(this.modalItem.tipo.length == 0 || this.modalItem.nome.length == 0 || this.modalItem.municipio.length == 0 || this.modalItem.uf.length == 0 ){
                 return true
             }
             return false
@@ -111,6 +120,6 @@ export default {
     width: 555px;
     background: #FFFFFF;
     margin: auto;
-    margin-top: 70px;
+    margin-top: 50px;
 }
 </style>

@@ -117,6 +117,38 @@ state.findLocalidadeById = (id) => {
   })
 }
 //<--Localidades-->
+//<--Categorias-->
+
+state.findCategorias = () => {
+  function map (doc, emit) {
+    if (doc.type === 'categoria') {
+      emit(doc.createdAt)
+    }
+  }
+  return db.query(map, {include_docs: true}).then(categorias =>
+    _.map(categorias.rows, (categoria) => categoria.doc)
+  )
+}
+
+state.recaregarCategorias = (obj, prop) => {
+  state.findCategorias().then(categorias => {
+    obj[prop] = _.map(categorias, (categoria) => categoria)
+  })
+  if (remotedb) {
+    db.sync(remotedb)
+  }
+  
+}
+
+state.findCategoriaById = (id) => {
+    return db.get(id).then(function (doc) {
+      console.log(doc);
+      return doc;
+    }).catch(function (err) {
+      console.log(err);
+  })
+}
+//<--categorias-->
 
 
 

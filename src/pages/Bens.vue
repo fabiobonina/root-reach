@@ -1,21 +1,18 @@
 <template>
-    <v-app>
+    <v-app standalone>
         <sidebar></sidebar>
         <main>
             <v-container fluid>
-                <div class="title">Click on sidebar to re-open.</div>
                 <v-card>
-                    <v-card-title><v-icon large v-badge="{ value:  items.length, left: true}" class="grey--text text--lighten-1">location_city</v-icon>{{ title }} <v-spacer></v-spacer>
+                    <v-card-title>{{ title }}<v-spacer></v-spacer>
                         <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
                         <v-btn floating small class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
                     </v-card-title>
                     <v-data-table v-bind:headers="headers" v-bind:items="items" v-bind:search="search">
                         <template slot="items" scope="props">
-                            <td>{{ props.item.clienteNome }}</td>
-                            <td>{{ props.item.tipo }}</td>
+                            <td>{{ props.item.fantasia }}</td>
                             <td>{{ props.item.nome }}</td>
-                            <td>{{ props.item.municipio }}</td>
-                            <td>{{ props.item.uf }}</td>
+                            <td>{{ props.item.seguimento }}</td>
                             <td>
                                 <router-link :to="'/'+ props.item.type +'/' + props.item._id"><v-btn floating small class="green"><v-icon light>visibility</v-icon></v-btn></router-link>
                                 <v-btn floating small class="blue" @click.native="showModalEdt = true; selecItem(props.item)"><v-icon light>edit</v-icon></v-btn>
@@ -29,62 +26,52 @@
                     <pre>{{ $data }}</pre>
                     <div id="app">
                         <!-- use the modal component, pass in the prop -->
-                        <modal-add @close="showModalAdd = false" @atualizar="itemModal" v-if="showModalAdd" :data="cliente"></modal-add>
+                        <modal-add @close="showModalAdd = false" @atualizar="itemModal" v-if="showModalAdd"  ></modal-add>
                         <modal-edt @close="showModalEdt = false" @atualizar="itemModal" v-if="showModalEdt" :data="modalItem"></modal-edt>
-                        <modal-del @close="showModalDel = false" @atualizar="itemModal" v-if="showModalDel" :data="modalItem"> </modal-del>
+                        <modal-del @close="showModalDel = false" @atualizar="itemModal" v-if="showModalDel"  :data="modalItem"></modal-del>
                     </div>
                 </v-card>
-
             </v-container>
         </main>
-
     </v-app>
 </template>
 
-
 <script>
+
 import Sidebar from '../components/principal/Sidebar'
-import ModalAdd from '../components/cliente/localidade/add'
-import ModalEdt from '../components/cliente/localidade/edt'
-import ModalDel from '../components/cliente/localidade/del'
+import ModalAdd from '../components/bem/_add'
+import ModalEdt from '../components/bem/_edt'
+import ModalDel from '../components/bem/_del'
 export default {
     //nome: '#user',
     components: { Sidebar, ModalAdd, ModalEdt, ModalDel },
     data () {
         return {
-            title: 'Localidades',
-            showModalAdd: false, showModalEdt: false, showModalDel: false,
-            modalItem: {},
-            cliente: '',
-            items: [],
-            search: '',
-            pagination: {},
-            headers: [
-                { text: 'Cliente', left: true, value: 'clienteNome' },
-                { text: 'Tipo', left: true, value: 'tipo' },
-                { text: 'Nome', value: 'nome'},
-                { text: 'municipio', value: 'municipio' },
-                { text: 'UF', value: 'uf' },
-                { text: 'Ação', value: 'acao' }
-            ]
+        title: 'Bens',
+        showModalAdd: false, showModalEdt: false, showModalDel: false,
+        errorMessage: '', successMessage: '',
+        modalItem: {},
+        search: '',
+        pagination: {},
+        headers: [
+            { text: 'Nome Fantasia', left: true, value: 'fantasia' },
+            { text: 'Nome', value: 'nome'},
+            { text: 'Seguimento', value: 'seguimento' },
+            { text: 'Ação', value: 'acao' }
+        ],
+        items: []
         }
     },
-    watch: {
-        // sempre que a pergunta mudar, essa função será executada
-    },
-    beforeCreate: function() {
-	    this.$store.state.recaregarLocalidades(this, 'items')
-    },
     mounted: function(){
-        console.log("bonina");     
-
-    },    
+        console.log("bonina");
+        this.getAllUsers();
+    },
     methods: {
         getAllUsers: function(){
-            this.$store.state.recaregarLocalidades(this, 'items')
+            this.$store.state.recaregarBens(this, 'items')
         },
         itemModal: function(){
-            this.$store.state.recaregarLocalidades(this, 'items'),
+            this.$store.state.recaregarBens(this, 'items'),
             this.showModalAdd = false,
             this.showModalEdt = false,
             this.showModalDel = false,
@@ -106,23 +93,10 @@ export default {
         }
     },
 }
+
 </script>
 
 <style scoped>
-.modal{
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-}
-.modalContainer{
-    width: 555px;
-    background: #FFFFFF;
-    margin: auto;
-    margin-top: 44px;
-}
 p.successMessage{
     background: #D8EFC2;
     color: #097133;

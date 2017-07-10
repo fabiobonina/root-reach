@@ -61,7 +61,6 @@
         </v-list>
       </v-card>
     </v-flex>
-
     </v-navigation-drawer>
     <v-toolbar fixed class="deep-orange" light>
       <v-toolbar-side-icon light @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>

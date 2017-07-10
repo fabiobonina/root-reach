@@ -1,39 +1,5 @@
 <template>
     <div>
-    <template>
-  <v-layout row>
-    <v-flex xs16 sm6 offset-sm3>
-      <v-card>
-        <v-toolbar class="white--text pink" light>
-          <v-toolbar-side-icon light></v-toolbar-side-icon>
-          <v-toolbar-title>Inbox</v-toolbar-title>
-          <v-btn light icon>
-            <v-icon>search</v-icon>
-          </v-btn>
-          <v-btn light icon>
-            <v-icon>check_circle</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <v-list two-line>
-          <v-list-item v-for="(item, index) in items" v-bind:key="item.nome">
-            <v-list-tile avatar ripple>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ item.nome }}</v-list-tile-title>
-                <v-list-tile-sub-title class="grey--text text--darken-4">{{ item.tipo }}</v-list-tile-sub-title>
-                <v-list-tile-sub-title>{{ item.municipio }}</v-list-tile-sub-title>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-list-tile-action-text>{{ item.ativo }}</v-list-tile-action-text>
-                <v-icon class="grey--text text--lighten-1">star_border</v-icon>
-              </v-list-tile-action>
-            </v-list-tile>
-            <v-divider v-if="index + 1 < items.length"></v-divider>
-          </v-list-item>
-        </v-list>
-      </v-card>
-    </v-flex>
-  </v-layout>
-</template>
         <main>
             <v-container fluid>
                 <v-card>
@@ -74,15 +40,15 @@
 
 
 <script>
-import ModalAdd from './add'
-import ModalEdt from './edt'
-import ModalDel from './del'
+import ModalAdd from './_add'
+import ModalEdt from './_edt'
+import ModalDel from './_del'
 export default {
     //nome: '#user',
     components: { ModalAdd, ModalEdt, ModalDel },
     data () {
         return {
-            title: 'Localidades',
+            title: 'Bens',
             showModalAdd: false, showModalEdt: false, showModalDel: false,
             modalItem: {},
             cliente: '',

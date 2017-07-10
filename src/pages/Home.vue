@@ -3,7 +3,6 @@
         <sidebar></sidebar>
         <main>
             <v-container fluid>
-                <div class="title">Click on sidebar to re-open.</div>
                     <div>
                         <v-card>
                             <v-card-title>
@@ -34,9 +33,9 @@
 
 import Sidebar from '../components/principal/Sidebar'
 import Demogrid from '../components/principal/Demogrid'
-import ModalAdd from '../components/cliente/add'
-import ModalEdt from '../components/cliente/edt'
-import ModalDel from '../components/cliente/del'
+import ModalAdd from '../components/cliente/_add'
+import ModalEdt from '../components/cliente/_edt'
+import ModalDel from '../components/cliente/_del'
 
 export default {
     // bootstrap the demo

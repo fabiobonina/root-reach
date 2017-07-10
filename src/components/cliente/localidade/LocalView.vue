@@ -7,7 +7,7 @@
             <v-container fluid>
                 <v-card>
                     <v-card-title>
-                        <h6>{{ title }}: {{ cliente.fantasia }} | {{ cliente.nome }}</h6>
+                        <h6>{{ cliente.fantasia }} > {{ localidade.tipo }} - {{ localidade.nome }}</h6>
                         <v-spacer></v-spacer>
                     </v-card-title>
                     <div>
@@ -21,17 +21,18 @@
 </template>
 
 <script>
-import Sidebar from '../principal/Sidebar'
+import Sidebar from '../../principal/Sidebar'
 
 
 export default {
-    //name: 'clientes',
+    //name: 'localidades',
     components: { Sidebar },
     data () {
         return {
-            title: 'Cliente',
+            title: 'Localidade',
             errorMessage: '', successMessage: '',
-            cliente: ''
+            localidade: '',
+            cliente: '',
         }
     },
     mounted: function(){
@@ -46,26 +47,15 @@ export default {
     methods: {
         getAllItems: function(){
             //console.log(this.$route.params.id);
-            this.$store.state.findClienteById(this.$route.params.id).then(cliente => {
+            this.$store.state.findLocalidadeById(this.$route.params.id).then(localidade => {
+                    this.localidade = localidade
+                    this.getCliente()
+            })
+        },
+        getCliente: function(){
+            //console.log(this.$route.params.id);
+            this.$store.state.findClienteById(this.localidade.clienteId).then(cliente => {
                     this.cliente = cliente
-            })
-        },
-        updateItem: function(){
-            this.$store.state.update(this.modalItem).then(results => {
-                this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
-                    this.localidades = localidades
-                })
-            })
-        },
-        deleteItem: function(){
-            const data = {
-                '_id': this.modalItem._id,
-                '_rev': this.modalItem._rev,
-            }
-            this.$store.state.delete(data).then(results => {
-                this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
-                    this.localidades = localidades
-                })
             })
         },
         selecItem: function(item){

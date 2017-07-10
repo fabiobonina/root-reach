@@ -1,0 +1,127 @@
+<template>
+<!-- template for the modal component -->
+    <transition name="modal">
+        <div class="modal">
+            <div class="modalContainer">
+                <v-toolbar class="indigo" light>
+                    <v-btn light icon @click.native="$emit('close')">
+                        <v-icon>arrow_back</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>Novo {{ title }}</v-toolbar-title>
+                </v-toolbar>
+                <template>
+                    <v-flex xs12 md16 offset-md1>
+                        <v-card>
+                        <v-card-text>
+                            <v-text-field required
+                            label="Nome"
+                            v-model="nome"
+                            ></v-text-field>
+                            <v-checkbox v-bind:label="`Ativo: ${ativo.toString()}`" v-model="ativo" light></v-checkbox>
+                            <small>*campos obrigatório</small>
+                        </v-card-text>
+                        </v-card>
+                    </v-flex>
+                    
+                </template>
+                <v-toolbar class="indigo" light>
+                    <v-toolbar-title>
+                        <v-btn flat light v-if="formValido()" @click.native="$emit('atualizar'); saveItem()">
+                            <span>Salva</span>
+                            <v-icon light>save</v-icon>
+                        </v-btn>
+                    </v-toolbar-title>
+                </v-toolbar>
+                <pre>{{ $data }}</pre>
+            </div>
+        </div>
+    </transition>
+<!-- app -->
+</template>
+
+<script>
+export default {
+    //name: 'clientes',
+    props: {
+        data: {}
+    },
+    data () {
+        return {
+            errors: [],
+            title: 'produto',
+            nome: '', ativo: 'true',
+        }
+    },
+    mounted: function(){
+        console.log("bonina");
+    },
+    computed: {
+        hasErrors () {
+            return this.errors.length > 0
+        }
+    },
+    watch: {
+        // sempre que a pergunta mudar, essa função será executada
+        tipo: function (data) {
+            this.formValido();
+        },
+        nome: function (data) {
+            this.formValido();
+        },
+        municipio: function (data) {
+            this.formValido();
+        },
+        uf: function (data) {
+            this.formValido();
+        }
+    },
+    methods: {
+        saveItem: function(){
+            const data = {
+                'type': this.title,
+                'nome': this.nome,
+                'ativo': this.ativo,
+                'cadastro': new Date().toJSON()
+            }
+            this.$store.state.create(data).then(results => {
+                this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
+                    this.localidades = localidades
+                })
+                 //this.$store.state.recaregarlocalidades(this, 'localidades')
+            })
+            this.nome = ''
+            this.ativo = 'true'
+
+        },
+        ehVazia () {
+            if(this.nome.length == 0 || this.ativo == true){
+                return true
+            }
+            return false
+        },
+        formValido(){
+            if(this.ehVazia()){
+                return false
+            }
+            return true
+        }
+    },
+}
+</script>
+
+<style>
+.modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+.modalContainer{
+    width: 555px;
+    background: #FFFFFF;
+    margin: auto;
+    margin-top: 70px;
+}
+</style>

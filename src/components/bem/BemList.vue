@@ -1,6 +1,5 @@
 <template>
     <div>
-        <sidebar></sidebar>
         <main>
             <v-container fluid>
                 <v-card>
@@ -10,9 +9,10 @@
                     </v-card-title>
                     <v-data-table v-bind:headers="headers" v-bind:items="items" v-bind:search="search">
                         <template slot="items" scope="props">
-                            <td>{{ props.item.fantasia }}</td>
+                            <td>{{ props.item.tipo }}</td>
                             <td>{{ props.item.nome }}</td>
-                            <td>{{ props.item.seguimento }}</td>
+                            <td>{{ props.item.municipio }}</td>
+                            <td>{{ props.item.uf }}</td>
                             <td>
                                 <router-link :to="'/'+ props.item.type +'/' + props.item._id"><v-btn floating small class="green"><v-icon light>visibility</v-icon></v-btn></router-link>
                                 <v-btn floating small class="blue" @click.native="showModalEdt = true; selecItem(props.item)"><v-icon light>edit</v-icon></v-btn>
@@ -26,52 +26,73 @@
                     <pre>{{ $data }}</pre>
                     <div id="app">
                         <!-- use the modal component, pass in the prop -->
-                        <modal-add @close="showModalAdd = false" @atualizar="itemModal" v-if="showModalAdd"  ></modal-add>
+                        <modal-add @close="showModalAdd = false" @atualizar="itemModal" v-if="showModalAdd" :data="cliente"></modal-add>
                         <modal-edt @close="showModalEdt = false" @atualizar="itemModal" v-if="showModalEdt" :data="modalItem"></modal-edt>
-                        <modal-del @close="showModalDel = false" @atualizar="itemModal" v-if="showModalDel"  :data="modalItem"></modal-del>
+                        <modal-del @close="showModalDel = false" @atualizar="itemModal" v-if="showModalDel" :data="modalItem"> </modal-del>
                     </div>
                 </v-card>
+
             </v-container>
         </main>
+
     </div>
 </template>
 
-<script>
 
-import Sidebar from '../components/principal/Sidebar'
-import ModalAdd from '../components/cliente/_add'
-import ModalEdt from '../components/cliente/_edt'
-import ModalDel from '../components/cliente/_del'
+<script>
+import ModalAdd from './_add'
+import ModalEdt from './_edt'
+import ModalDel from './_del'
 export default {
     //nome: '#user',
-    components: { Sidebar, ModalAdd, ModalEdt, ModalDel },
+    components: { ModalAdd, ModalEdt, ModalDel },
     data () {
         return {
-        title: 'Clientes',
-        showModalAdd: false, showModalEdt: false, showModalDel: false,
-        errorMessage: '', successMessage: '',
-        modalItem: {},
-        search: '',
-        pagination: {},
-        headers: [
-            { text: 'Nome Fantasia', left: true, value: 'fantasia' },
-            { text: 'Nome', value: 'nome'},
-            { text: 'Seguimento', value: 'seguimento' },
-            { text: 'Ação', value: 'acao' }
-        ],
-        items: []
+            title: 'Localidades',
+            showModalAdd: false, showModalEdt: false, showModalDel: false,
+            modalItem: {},
+            cliente: '',
+            items: [],
+            search: '',
+            pagination: {},
+            headers: [
+                { text: 'Tipo', left: true, value: 'tipo' },
+                { text: 'Nome', value: 'nome'},
+                { text: 'municipio', value: 'municipio' },
+                { text: 'UF', value: 'uf' },
+                { text: 'Ação', value: 'acao' }
+            ]
         }
     },
-    mounted: function(){
-        console.log("bonina");
-        this.getAllUsers();
+    watch: {
+        // sempre que a pergunta mudar, essa função será executada
     },
+    beforeCreate: function() {
+	    this.$store.state.findClienteById(this.$route.params.id).then(cliente => {
+                this.$store.state.findLocalidadesByClienteId(this.$route.params.id).then(localidades => {
+                    this.cliente = cliente
+                    this.items = localidades
+                })
+        })
+
+    },
+    mounted: function(){
+        console.log("bonina");     
+
+    },    
     methods: {
         getAllUsers: function(){
-            this.$store.state.recaregarClientes(this, 'items')
+            this.$store.state.findClienteById(this.$route.params.id).then(cliente => {
+                this.$store.state.findLocalidadesByClienteId(this.$route.params.id).then(localidades => {
+                    this.cliente = cliente
+                    this.items = localidades
+                })
+            })
         },
         itemModal: function(){
-            this.$store.state.recaregarClientes(this, 'items'),
+            this.$store.state.findLocalidadesByClienteId(this.$route.params.id).then(localidades => {
+                this.items = localidades
+            }),
             this.showModalAdd = false,
             this.showModalEdt = false,
             this.showModalDel = false,
@@ -93,8 +114,6 @@ export default {
         }
     },
 }
-
-
 </script>
 
 <style scoped>
@@ -126,6 +145,4 @@ p.errorMessage{
     padding: 9px;
     margin: 22px 0;
 }
-
-
 </style>
