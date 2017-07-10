@@ -10,10 +10,9 @@
                         {{ i.title }}
                     </v-tabs-item>
                 </v-tabs-bar>
-                <v-tabs-content v-for="i in 5" :key="i" :id="'tab-' + 1">
+                <v-tabs-content :key="1" :id="'tab-' + 1">
                     <v-card flat>
                         <v-card-text>{{ text }}
-                        {{ i.item }}
                         <div>
                             <router-view></router-view>
                         </div>
@@ -21,7 +20,7 @@
                         
                     </v-card>
                 </v-tabs-content>
-                <v-tabs-content v-for="i in 5" :key="i" :id="'tab-' + 2">
+                <v-tabs-content :id="'tab-' + 2">
                     <v-card flat>
                         <v-card-text>
                         <div>
@@ -30,7 +29,7 @@
                         </v-card-text>
                     </v-card>
                 </v-tabs-content>
-                <v-tabs-content v-for="i in 5" :key="i" :id="'tab-' + 3">
+                <v-tabs-content :key="i" :id="'tab-' + 3">
                     <v-card flat>
                         <v-card-text>
                         <div>

@@ -9,7 +9,7 @@
                                 {{ title }}
                                 <v-spacer></v-spacer>
                                 <v-text-field append-icon="search" label="Search" single-line hide-details v-model="searchQuery"></v-text-field>
-                                <v-btn floating small class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
+                                <v-btn icon class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
                             </v-card-title>
                             <modal-list :data="items" :filter-key="searchQuery">
                             </modal-list>

@@ -15,7 +15,7 @@ import LocalTab from '@/components/cliente/localidade/LocalTab'
 import LocalView from '@/components/cliente/localidade/LocalView'
 import Usuarios from '@/pages/Usuarios'
 import Config from '@/pages/Config'
-import ProdList from '@/components/config/produto/ProdList'
+import CatList from '@/components/config/categoria/CatList'
 import GrupEqList from '@/components/config/grupoEquip/GrupEqList'
 import FabList from '@/components/config/fabricante/FabList'
 
@@ -43,7 +43,7 @@ export default new Router({
     { path: '/config', component: Config,
         children: [
             {path: '', components: { 
-                default: ProdList,
+                default: CatList,
                 fab: FabList,
                 grupo: GrupEqList }, name:'Configuração'},
         ]
