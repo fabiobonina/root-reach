@@ -13,32 +13,11 @@
                     <v-flex xs12 md16 offset-md1>
                         <v-card>
                         <v-card-text>
-                            <v-flex xs6>
-                                <v-select v-bind:items="states" required dark single-line auto
-                                v-model="tipo"
-                                label="Tipo"
-                                ></v-select>
-                            </v-flex>
                             <v-text-field required
                             label="Nome"
                             v-model="nome"
                             ></v-text-field>
-                            <v-text-field class="mt-5"
-                            label="Regional"
-                            v-model="regional"
-                            ></v-text-field>
-                            <v-text-field required
-                            label="municipio"
-                            v-model="municipio"
-                            ></v-text-field>
-                            <v-text-field required hint="Exemplo: PE"
-                            label="UF"
-                            v-model="uf"
-                            ></v-text-field>
-                            <v-text-field
-                            label="Ativo"
-                            v-model="ativo"
-                            ></v-text-field>
+                            <v-checkbox v-bind:label="`Ativo: ${ativo.toString()}`" v-model="ativo" light></v-checkbox>
                             <small>*campos obrigatório</small>
                         </v-card-text>
                         </v-card>
@@ -53,7 +32,6 @@
                         </v-btn>
                     </v-toolbar-title>
                 </v-toolbar>
-                <pre>{{ $data }}</pre>
             </div>
         </div>
     </transition>
@@ -69,10 +47,8 @@ export default {
     data () {
         return {
             errors: [],
-            title: 'localidade',
-            cliente: this.data,
-            nome: '', tipo: '', regional: '', municipio: '', uf: '', ativo: '', cadastro: '',
-            states: ['Capitação','Elevatoria','ETA','ETE','Industria','Poço','Outro']
+            title: 'fabricante',
+            nome: '', ativo: 'true',
         }
     },
     mounted: function(){
@@ -85,48 +61,26 @@ export default {
     },
     watch: {
         // sempre que a pergunta mudar, essa função será executada
-        tipo: function (data) {
-            this.formValido();
-        },
         nome: function (data) {
             this.formValido();
         },
-        municipio: function (data) {
-            this.formValido();
-        },
-        uf: function (data) {
+        ativo: function (data) {
             this.formValido();
         }
     },
     methods: {
         saveItem: function(){
             const data = {
-                'type': 'localidade',
-                'clienteId': this.cliente._id,
-                'clienteNome': this.cliente.fantasia,
+                'type': this.title,
                 'nome': this.nome,
-                'tipo': this.tipo,
-                'municipio': this.municipio,
-                'uf': this.uf,
-                'ativo': this.ativo,
-                'cadastro': new Date().toJSON()
+                'ativo': this.ativo
             }
-            this.$store.state.create(data).then(results => {
-                this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
-                    this.localidades = localidades
-                })
-                 //this.$store.state.recaregarlocalidades(this, 'localidades')
-            })
-            this.tipo = ''
+            this.$store.state.create(data)
             this.nome = ''
-            this.regional = ''
-            this.municipio = ''
-            this.uf = ''
-            this.ativo = ''
-
+            this.ativo = 'true'
         },
         ehVazia () {
-            if(this.tipo.length == 0 || this.nome.length == 0 || this.municipio.length == 0 || this.uf.length == 0){
+            if(this.nome.length == 0 || this.ativo == true){
                 return true
             }
             return false

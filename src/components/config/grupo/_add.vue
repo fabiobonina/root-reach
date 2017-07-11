@@ -32,7 +32,7 @@
                         </v-btn>
                     </v-toolbar-title>
                 </v-toolbar>
-                <pre>{{ $data }}</pre>
+                
             </div>
         </div>
     </transition>
@@ -48,8 +48,9 @@ export default {
     data () {
         return {
             errors: [],
-            title: 'produto',
-            nome: '', ativo: 'true',
+            title: 'grupo',
+            nome: '',
+            ativo: 'true',
         }
     },
     mounted: function(){
@@ -62,16 +63,10 @@ export default {
     },
     watch: {
         // sempre que a pergunta mudar, essa função será executada
-        tipo: function (data) {
-            this.formValido();
-        },
         nome: function (data) {
             this.formValido();
         },
-        municipio: function (data) {
-            this.formValido();
-        },
-        uf: function (data) {
+        ativo: function (data) {
             this.formValido();
         }
     },
@@ -80,18 +75,11 @@ export default {
             const data = {
                 'type': this.title,
                 'nome': this.nome,
-                'ativo': this.ativo,
-                'cadastro': new Date().toJSON()
+                'ativo': this.ativo
             }
-            this.$store.state.create(data).then(results => {
-                this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
-                    this.localidades = localidades
-                })
-                 //this.$store.state.recaregarlocalidades(this, 'localidades')
-            })
+            this.$store.state.create(data)
             this.nome = ''
             this.ativo = 'true'
-
         },
         ehVazia () {
             if(this.nome.length == 0 || this.ativo == true){

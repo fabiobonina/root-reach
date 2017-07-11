@@ -32,7 +32,7 @@
                         </v-btn>
                     </v-toolbar-title>
                 </v-toolbar>
-                <pre>{{ $data }}</pre>
+
             </div>
         </div>
     </transition>
@@ -62,16 +62,10 @@ export default {
     },
     watch: {
         // sempre que a pergunta mudar, essa função será executada
-        tipo: function (data) {
-            this.formValido();
-        },
         nome: function (data) {
             this.formValido();
         },
-        municipio: function (data) {
-            this.formValido();
-        },
-        uf: function (data) {
+        ativo: function (data) {
             this.formValido();
         }
     },
@@ -80,8 +74,7 @@ export default {
             const data = {
                 'type': this.title,
                 'nome': this.nome,
-                'ativo': this.ativo,
-                'cadastro': new Date().toJSON()
+                'ativo': this.ativo
             }
             this.$store.state.create(data)
             this.nome = ''

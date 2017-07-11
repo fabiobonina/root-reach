@@ -42,7 +42,7 @@
             </v-card>
           </v-flex>
         </v-layout>
-        
+       
         <div id="app">
             <!-- use the modal component, pass in the prop -->
             <modal-add @close="showModalAdd = false" @atualizar="itemModal" v-if="showModalAdd" :data="cliente"></modal-add>
@@ -67,7 +67,7 @@ export default {
   },
   data: function () {
     return {
-      title: 'Categorias',
+      title: 'Grupos',
       showModalAdd: false, showModalEdt: false, showModalDel: false,
       modalItem: {},
       filterKey: '',
@@ -89,14 +89,14 @@ export default {
     }
   },
   beforeCreate: function() {
-	    this.$store.state.recaregarCategorias(this, 'data')
+	    this.$store.state.recaregarGrupos(this, 'data')
   },
   methods: {
     getAllUsers: function(){
-        this.$store.state.recaregarCategorias(this, 'data')
+        this.$store.state.recaregarGrupos(this, 'data')
     },
     itemModal: function(){
-        this.$store.state.recaregarCategorias(this, 'data'),
+        this.$store.state.recaregarGrupos(this, 'data'),
         this.showModalAdd = false,
         this.showModalEdt = false,
         this.showModalDel = false

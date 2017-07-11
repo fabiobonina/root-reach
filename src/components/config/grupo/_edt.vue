@@ -18,7 +18,7 @@
                                 v-model="modalItem.nome"
                             ></v-text-field>
                             <v-checkbox
-                                v-bind:label="`Ativo: ${ativo.toString()}`"
+                                v-bind:label="`Ativo: ${modalItem.ativo.toString()}`"
                                 v-model="modalItem.ativo" light
                             ></v-checkbox>
                             <small>*campos obrigatório</small>
@@ -49,8 +49,7 @@ export default {
     data () {
         return {
             errors: [],
-            title: 'produto',
-            states: ['Bebida','Industria','Saneamento','Outro'],
+            title: 'grupo',
             modalItem: this.data
         }
     },
@@ -73,7 +72,7 @@ export default {
             this.$store.state.update(this.modalItem)
         },
         ehVazia () {
-            if(this.modalItem.fantasia.length == 0 || this.modalItem.nome.length == 0 || this.modalItem.seguimento.length == 0 ){
+            if( this.modalItem.nome.length == 0){
                 return true
             }
             return false

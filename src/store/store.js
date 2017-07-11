@@ -117,8 +117,7 @@ state.findLocalidadeById = (id) => {
   })
 }
 //<--Localidades-->
-//<--Categorias-->
-
+//<-categorias--->
 state.findCategorias = () => {
   function map (doc, emit) {
     if (doc.type === 'categoria') {
@@ -137,7 +136,6 @@ state.recaregarCategorias = (obj, prop) => {
   if (remotedb) {
     db.sync(remotedb)
   }
-  
 }
 
 state.findCategoriaById = (id) => {
@@ -148,7 +146,65 @@ state.findCategoriaById = (id) => {
       console.log(err);
   })
 }
-//<--categorias-->
+//</-categorias--->
+//<-grupos--->
+state.findGrupos = () => {
+  function map (doc, emit) {
+    if (doc.type === 'grupo') {
+      emit(doc.createdAt)
+    }
+  }
+  return db.query(map, {include_docs: true}).then(grupos =>
+    _.map(grupos.rows, (grupo) => grupo.doc)
+  )
+}
+
+state.recaregarGrupos = (obj, prop) => {
+  state.findGrupos().then(grupos => {
+    obj[prop] = _.map(grupos, (grupo) => grupo)
+  })
+  if (remotedb) {
+    db.sync(remotedb)
+  }
+}
+
+state.findGrupoById = (id) => {
+    return db.get(id).then(function (doc) {
+      console.log(doc);
+      return doc;
+    }).catch(function (err) {
+      console.log(err);
+  })
+}
+//</-grupos--->
+//<-fabricantes--->
+state.findFabricantes = () => {
+  function map (doc, emit) {
+    if (doc.type === 'fabricante') {
+      emit(doc.createdAt)
+    }
+  }
+  return db.query(map, {include_docs: true}).then(fabricantes =>
+    _.map(fabricantes.rows, (fabricante) => fabricante.doc)
+  )
+}
+state.recaregarFabricantes = (obj, prop) => {
+  state.findFabricantes().then(fabricantes => {
+    obj[prop] = _.map(fabricantes, (fabricante) => fabricante)
+  })
+  if (remotedb) {
+    db.sync(remotedb)
+  }
+}
+state.findFabricanteById = (id) => {
+    return db.get(id).then(function (doc) {
+      console.log(doc);
+      return doc;
+    }).catch(function (err) {
+      console.log(err);
+  })
+}
+//</-fabricantes--->
 
 
 

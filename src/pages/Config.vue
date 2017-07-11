@@ -12,29 +12,22 @@
                 </v-tabs-bar>
                 <v-tabs-content :key="1" :id="'tab-' + 1">
                     <v-card flat>
-                        <v-card-text>{{ text }}
-                        <div>
+                        <v-card-text>
                             <router-view></router-view>
-                        </div>
                         </v-card-text>
-                        
                     </v-card>
                 </v-tabs-content>
                 <v-tabs-content :id="'tab-' + 2">
                     <v-card flat>
                         <v-card-text>
-                        <div>
                             <router-view name="grupo"></router-view>
-                        </div>
                         </v-card-text>
                     </v-card>
                 </v-tabs-content>
-                <v-tabs-content :key="i" :id="'tab-' + 3">
+                <v-tabs-content :id="'tab-' + 3">
                     <v-card flat>
                         <v-card-text>
-                        <div>
                             <router-view name="fab"></router-view>
-                        </div>
                         </v-card-text>
                     </v-card>
                 </v-tabs-content>
@@ -53,11 +46,9 @@ export default {
       return {
         text: 'Lorem ipsum dolor sit amet, consequat.',
         items: [
-              { item: '1', title: 'Produtos', router: 'produtos' },
-              { item: '2', title: 'Grupo Equip.', router: 'grupo' },
-              { item: '3', title: 'Fabricante', router: 'fabricante' },
-              { item: '4', title: 'Bens', router: 'bens' },
-              { item: '5', title: 'Configuração', router: 'config' }
+              { item: '1', title: 'Categoria', router: 'categoria' },
+              { item: '2', title: 'Grupo', router: 'grupo' },
+              { item: '3', title: 'Fabricante', router: 'fabricante' }
         ]
       }
     }

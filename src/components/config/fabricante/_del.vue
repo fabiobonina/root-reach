@@ -14,8 +14,7 @@
                         <v-card>
                         <v-card-text>
                             <h6>Você vai apagar:</h6>
-                            <h5>{{ modalItem.fantasia }}</h5>
-                            <h6>{{ modalItem.nome }}</h6>
+                            <h5>{{ modalItem.nome }}</h5>
                         </v-card-text>
                         </v-card>
                     </v-flex>
@@ -78,14 +77,4 @@ export default {
     margin: auto;
     margin-top: 70px;
 }
-.modalHeading{
-    padding: 9px;
-    background: #06307c;
-    color: #FFFFFF;
-}
-.modalContent{
-    min-height: 333px;
-    padding: 44px;
-}
-
 </style>
