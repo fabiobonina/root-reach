@@ -3,8 +3,8 @@
     <transition name="modal">
         <div class="modal">
             <div class="modalContainer">
-                <v-toolbar class="blue" light>
-                    <v-btn light icon @click.native="$emit('atualizar')">
+                <v-toolbar class="blue" dark>
+                    <v-btn dark icon @click.native="$emit('atualizar')">
                         <v-icon>arrow_back</v-icon>
                     </v-btn>
                     <v-toolbar-title>Edtar {{ title }}</v-toolbar-title>
@@ -19,18 +19,18 @@
                             ></v-text-field>
                             <v-checkbox
                                 v-bind:label="`Ativo: ${modalItem.ativo.toString()}`"
-                                v-model="modalItem.ativo" light
+                                v-model="modalItem.ativo"
                             ></v-checkbox>
                             <small>*campos obrigatório</small>
                         </v-card-text>
                         </v-card>
                     </v-flex>
                 </template>
-                <v-toolbar class="blue" light>
+                <v-toolbar class="blue" dark><v-spacer></v-spacer>
                     <v-toolbar-title>
-                        <v-btn flat light v-if="formValido()" @click.native="$emit('atualizar'); updateItem()">
+                        <v-btn flat dark v-if="formValido()" @click.native="$emit('atualizar'); updateItem()">
                             <span>Salva</span>
-                            <v-icon light>save</v-icon>
+                            <v-icon dark>save</v-icon>
                         </v-btn>
                     </v-toolbar-title>
                 </v-toolbar>

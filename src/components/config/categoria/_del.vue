@@ -3,8 +3,8 @@
     <transition name="modal">
         <div class="modal">
             <div class="modalContainer">
-                <v-toolbar class="red" light>
-                    <v-btn light icon @click.native="$emit('close')">
+                <v-toolbar class="red" dark>
+                    <v-btn dark icon @click.native="$emit('close')">
                         <v-icon>arrow_back</v-icon>
                     </v-btn>
                     <v-toolbar-title>você tem certeza?</v-toolbar-title>
@@ -19,11 +19,11 @@
                         </v-card>
                     </v-flex>
                 </template>
-                <v-toolbar class="red" light>
+                <v-toolbar class="red" dark><v-spacer></v-spacer>
                     <v-toolbar-title>
-                        <v-btn flat light @click.native="$emit('atualizar'); deleteItem()">
+                        <v-btn flat dark @click.native="$emit('atualizar'); deleteItem()">
                             <span>Delete</span>
-                            <v-icon light>delete</v-icon>
+                            <v-icon dark>delete</v-icon>
                         </v-btn>
                     </v-toolbar-title>
                 </v-toolbar>

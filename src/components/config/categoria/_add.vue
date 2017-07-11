@@ -2,12 +2,12 @@
 <!-- template for the modal component -->
     <transition name="modal">
         <div class="modal">
-            <div class="modalContainer">
-                <v-toolbar class="indigo" light>
+            <div class="modalContainer" >
+                <v-toolbar class="indigo" dark>
                     <v-btn light icon @click.native="$emit('close')">
                         <v-icon>arrow_back</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Novo {{ title }}</v-toolbar-title>
+                    <v-toolbar-title>Nova {{ title }}</v-toolbar-title>
                 </v-toolbar>
                 <template>
                     <v-flex xs12 md16 offset-md1>
@@ -24,15 +24,16 @@
                     </v-flex>
                     
                 </template>
-                <v-toolbar class="indigo" light>
+                <div class="text-xs-center">
+                <v-toolbar class="indigo" dark><v-spacer></v-spacer>
                     <v-toolbar-title>
-                        <v-btn flat light v-if="formValido()" @click.native="$emit('atualizar'); saveItem()">
+                        <v-btn flat dark v-if="formValido()" @click.native="$emit('atualizar'); saveItem()">
                             <span>Salva</span>
-                            <v-icon light>save</v-icon>
+                            <v-icon dark>save</v-icon>
                         </v-btn>
                     </v-toolbar-title>
                 </v-toolbar>
-
+                </div>
             </div>
         </div>
     </transition>
