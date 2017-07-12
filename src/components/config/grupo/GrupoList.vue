@@ -7,7 +7,7 @@
             <v-card>
               <v-card-title>{{ title }}<v-spacer></v-spacer>
                   <v-text-field append-icon="search" label="Search" single-line hide-details v-model="filterKey"></v-text-field>
-                  <v-btn icon class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
+                  <v-btn icon dark class="indigo" @click.native="showModalAdd = true"><v-icon dark>add</v-icon></v-btn>
               </v-card-title>
               <v-list>
                 <template v-for="(item, index) in items">
@@ -24,12 +24,12 @@
                       <v-list>
                         <v-list-tile>
                           <v-btn icon dark class="blue" @click.native="showModalEdt = true; selecItem(item)">
-                            <v-icon light>edit</v-icon>
+                            <v-icon dark>edit</v-icon>
                           </v-btn>
                         </v-list-tile>
                         <v-list-tile>
                           <v-btn icon dark class="red" @click.native="showModalDel = true; selecItem(item)">
-                            <v-icon light>delete</v-icon>
+                            <v-icon dark>delete</v-icon>
                           </v-btn>
                         </v-list-tile>
                       </v-list>

@@ -6,7 +6,7 @@
                 <v-card>
                     <v-card-title>{{ title }}<v-spacer></v-spacer>
                         <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
-                        <v-btn floating small class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
+                        <v-btn icon dark class="indigo" @click.native="showModalAdd = true"><v-icon dark>add</v-icon></v-btn>
                     </v-card-title>
                     <v-data-table v-bind:headers="headers" v-bind:items="items" v-bind:search="search">
                         <template slot="items" scope="props">
@@ -14,9 +14,9 @@
                             <td>{{ props.item.nome }}</td>
                             <td>{{ props.item.seguimento }}</td>
                             <td>
-                                <router-link :to="'/'+ props.item.type +'/' + props.item._id"><v-btn floating small class="green"><v-icon light>visibility</v-icon></v-btn></router-link>
-                                <v-btn floating small class="blue" @click.native="showModalEdt = true; selecItem(props.item)"><v-icon light>edit</v-icon></v-btn>
-                                <v-btn floating small class="red" @click.native="showModalDel = true; selecItem(props.item)"><v-icon light>delete</v-icon></v-btn>
+                                <router-link :to="'/'+ props.item.type +'/' + props.item._id"><v-btn icon dark class="green"><v-icon light>visibility</v-icon></v-btn></router-link>
+                                <v-btn icon dark class="blue" @click.native="showModalEdt = true; selecItem(props.item)"><v-icon light>edit</v-icon></v-btn>
+                                <v-btn icon dark class="red" @click.native="showModalDel = true; selecItem(props.item)"><v-icon light>delete</v-icon></v-btn>
                             </td>
                         </template>
                         <template slot="pageText" scope="{ pageStart, pageStop }">

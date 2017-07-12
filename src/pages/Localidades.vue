@@ -3,30 +3,28 @@
         <sidebar></sidebar>
         <main>
             <v-container fluid>
-                <div class="title">Click on sidebar to re-open.</div>
                 <v-card>
                     <v-card-title><v-icon large v-badge="{ value:  '1', left: true}" class="grey--text text--lighten-1">location_city</v-icon>{{ title }} <v-spacer></v-spacer>
                         <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
-                        <v-btn floating small class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
+                        <v-btn icon dark class="indigo" @click.native="showModalAdd = true"><v-icon dark>add</v-icon></v-btn>
                     </v-card-title>
                     <v-data-table v-bind:headers="headers" v-bind:items="items" v-bind:search="search">
                         <template slot="items" scope="props">
                             <td>{{ props.item.clienteNome }}</td>
-                            <td>{{ props.item.tipo }}</td>
-                            <td>{{ props.item.nome }}</td>
-                            <td>{{ props.item.municipio }}</td>
-                            <td>{{ props.item.uf }}</td>
-                            <td>
-                                <router-link :to="'/'+ props.item.type +'/' + props.item._id"><v-btn floating small class="green"><v-icon light>visibility</v-icon></v-btn></router-link>
-                                <v-btn floating small class="blue" @click.native="showModalEdt = true; selecItem(props.item)"><v-icon light>edit</v-icon></v-btn>
-                                <v-btn floating small class="red" @click.native="showModalDel = true; selecItem(props.item)"><v-icon light>delete</v-icon></v-btn>
+                            <td class="text-xs-right">{{ props.item.tipo }}</td>
+                            <td class="text-xs-right">{{ props.item.nome }}</td>
+                            <td class="text-xs-right">{{ props.item.municipio }}</td>
+                            <td class="text-xs-right">{{ props.item.uf }}</td>
+                            <td class="text-xs-right">
+                                <router-link :to="'/'+ props.item.type +'/' + props.item._id"><v-btn icon dark class="green"><v-icon dark>visibility</v-icon></v-btn></router-link>
+                                <v-btn icon dark class="blue" @click.native="showModalEdt = true; selecItem(props.item)"><v-icon dark>edit</v-icon></v-btn>
+                                <v-btn icon dark class="red" @click.native="showModalDel = true; selecItem(props.item)"><v-icon dark>delete</v-icon></v-btn>
                             </td>
                         </template>
                         <template slot="pageText" scope="{ pageStart, pageStop }">
                             From {{ pageStart }} to {{ pageStop }}
                         </template>
                     </v-data-table>
-                    <pre>{{ $data }}</pre>
                     <div id="app">
                         <!-- use the modal component, pass in the prop -->
                         <modal-add @close="showModalAdd = false" @atualizar="itemModal" v-if="showModalAdd" :data="cliente"></modal-add>
@@ -60,8 +58,11 @@ export default {
             search: '',
             pagination: {},
             headers: [
-                { text: 'Cliente', left: true, value: 'clienteNome' },
-                { text: 'Tipo', left: true, value: 'tipo' },
+                { text: 'Cliente', 
+                    align: 'left',
+                    sortable: false,
+                    value: 'clienteNome' },
+                { text: 'Tipo', value: 'tipo' },
                 { text: 'Nome', value: 'nome'},
                 { text: 'municipio', value: 'municipio' },
                 { text: 'UF', value: 'uf' },

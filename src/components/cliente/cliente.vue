@@ -13,7 +13,6 @@
                     <div>
                         <router-view></router-view>
                     </div>
-                    <pre>{{ $data }}</pre>
                 </v-card>
             </v-container>
         </main>

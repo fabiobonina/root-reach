@@ -5,7 +5,7 @@
                 <v-card>
                     <v-card-title>{{ title }}<v-spacer></v-spacer>
                         <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
-                        <v-btn icon dark class="indigo" @click.native="showModalAdd = true"><v-icon light>add</v-icon></v-btn>
+                        <v-btn icon dark class="indigo" @click.native="showModalAdd = true"><v-icon dark>add</v-icon></v-btn>
                     </v-card-title>
                     <v-data-table v-bind:headers="headers" v-bind:items="items" v-bind:search="search">
                         <template slot="items" scope="props">
@@ -13,7 +13,7 @@
                             <td>{{ props.item.nome }}</td>
                             <td>{{ props.item.municipio }}</td>
                             <td>{{ props.item.uf }}</td>
-                            <td>
+                            <td class="text-xs-right">
                                 <router-link :to="'/'+ props.item.type +'/' + props.item._id"><v-btn icon dark class="green"><v-icon light>visibility</v-icon></v-btn></router-link>
                                 <v-btn icon dark class="blue" @click.native="showModalEdt = true; selecItem(props.item)"><v-icon light>edit</v-icon></v-btn>
                                 <v-btn icon dark class="red" @click.native="showModalDel = true; selecItem(props.item)"><v-icon light>delete</v-icon></v-btn>
@@ -23,7 +23,6 @@
                             From {{ pageStart }} to {{ pageStop }}
                         </template>
                     </v-data-table>
-                    <pre>{{ $data }}</pre>
                     <div id="app">
                         <!-- use the modal component, pass in the prop -->
                         <modal-add @close="showModalAdd = false" @atualizar="itemModal" v-if="showModalAdd" :data="cliente"></modal-add>
@@ -55,10 +54,10 @@ export default {
             search: '',
             pagination: {},
             headers: [
-                { text: 'Tipo', left: true, value: 'tipo' },
-                { text: 'Nome', value: 'nome'},
-                { text: 'municipio', value: 'municipio' },
-                { text: 'UF', value: 'uf' },
+                { text: 'Tipo', align: 'left', value: 'tipo' },
+                { text: 'Nome', align: 'left', value: 'nome'},
+                { text: 'municipio', align: 'left', value: 'municipio' },
+                { text: 'UF', align: 'left', value: 'uf' },
                 { text: 'Ação', value: 'acao' }
             ]
         }
