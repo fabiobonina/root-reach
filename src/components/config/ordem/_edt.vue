@@ -13,14 +13,7 @@
                     <v-flex xs12 md16 offset-md1>
                         <v-card>
                         <v-card-text>
-                            <v-text-field required
-                                label="Nome"
-                                v-model="modalItem.nome"
-                            ></v-text-field>
-                            <v-checkbox
-                                v-bind:label="`Ativo: ${modalItem.ativo.toString()}`"
-                                v-model="modalItem.ativo" dark
-                            ></v-checkbox>
+                            <v-text-field label="Nome" v-model="modalItem.nome" required></v-text-field>
                             <small>*campos obrigatório</small>
                         </v-card-text>
                         </v-card>
@@ -49,7 +42,7 @@ export default {
     data () {
         return {
             errors: [],
-            title: 'fabricante',
+            title: 'grupo',
             modalItem: this.data
         }
     },
@@ -72,7 +65,7 @@ export default {
             this.$store.state.update(this.modalItem)
         },
         ehVazia () {
-            if(this.modalItem.nome.length == 0) {
+            if( this.modalItem.nome.length == 0){
                 return true
             }
             return false

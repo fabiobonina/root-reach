@@ -10,7 +10,7 @@
                         {{ i.title }}
                     </v-tabs-item>
                 </v-tabs-bar>
-                <v-tabs-content :key="1" :id="'tab-' + 1">
+                <v-tabs-content :id="'tab-' + 1">
                     <v-card flat>
                         <v-card-text>
                             <router-view></router-view>
@@ -19,16 +19,17 @@
                 </v-tabs-content>
                 <v-tabs-content :id="'tab-' + 2">
                     <v-card flat>
-                        <v-card-text>
-                            <router-view name="grupo"></router-view>
-                        </v-card-text>
+                        <v-card-text><router-view name="ordem"></router-view></v-card-text>
                     </v-card>
                 </v-tabs-content>
                 <v-tabs-content :id="'tab-' + 3">
                     <v-card flat>
-                        <v-card-text>
-                            <router-view name="fab"></router-view>
-                        </v-card-text>
+                        <v-card-text><router-view name="grupo"></router-view></v-card-text>
+                    </v-card>
+                </v-tabs-content>
+                <v-tabs-content :id="'tab-' + 4">
+                    <v-card flat>
+                        <v-card-text><router-view name="fab"></router-view></v-card-text>
                     </v-card>
                 </v-tabs-content>
             </v-tabs>
@@ -47,8 +48,9 @@ export default {
         text: 'Lorem ipsum dolor sit amet, consequat.',
         items: [
               { item: '1', title: 'Categoria', router: 'categoria' },
-              { item: '2', title: 'Grupo', router: 'grupo' },
-              { item: '3', title: 'Fabricante', router: 'fabricante' }
+              { item: '2', title: 'Ordem', router: 'ordem' },
+              { item: '3', title: 'Grupo', router: 'grupo' },
+              { item: '4', title: 'Fabricante', router: 'fabricante' }
         ]
       }
     }
