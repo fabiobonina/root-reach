@@ -17,6 +17,7 @@ import Usuarios from '@/pages/Usuarios'
 import Config from '@/pages/Config'
 import CatList from '@/components/config/categoria/CatList'
 import GrupoList from '@/components/config/grupo/GrupoList'
+import OrdemList from '@/components/config/ordem/OrdemList'
 import FabList from '@/components/config/fabricante/FabList'
 
 Vue.use(Router)
@@ -44,8 +45,10 @@ export default new Router({
         children: [
             {path: '', components: { 
                 default: CatList,
-                fab: FabList,
-                grupo: GrupoList }, name:'Configuração'},
+                ordem: OrdemList,
+                grupo: GrupoList,
+                fab: FabList
+                }, name:'Configuração'},
         ]
     },
   ]

@@ -1,37 +1,48 @@
 <template>
 <!-- template for the modal component -->
-    <transition name="modal">
-        <div class="modal">
-            <div class="modalContainer" >
-                <v-toolbar class="indigo" dark>
-                    <v-btn light icon @click.native="$emit('close')">
+<v-layout row justify-center>
+    <v-dialog v-model="dialog" persistent width="600px">
+      <v-card >
+        <v-toolbar class="indigo" dark>
+            <v-btn dark icon @click.native="$emit('close')">
+                <v-icon>arrow_back</v-icon>
+            </v-btn>
+            <v-toolbar-title>Novo {{ title }}</v-toolbar-title>
+        </v-toolbar>
+        
+        <v-card-title class="indigo dark--text darken-1--text " dark>Select Country</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text>
+            <v-text-field label="Nome" v-model="nome" required></v-text-field>
+            <small>*campos obrigatório</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
+          <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Save</v-btn>
+        </v-card-actions>
+        <v-divider></v-divider>
+        <v-card-actions class="indigo" dark>
+        <v-spacer></v-spacer>
+          <v-btn dark flat @click.native="dialog = false">Close</v-btn>
+          <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Save</v-btn>
+        </v-card-actions>
+        <v-toolbar class="indigo" dark>
+                    <v-btn dark icon @click.native="$emit('close')">
                         <v-icon>arrow_back</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Nova {{ title }}</v-toolbar-title>
+                    <v-toolbar-title>Novo {{ title }}</v-toolbar-title>
                 </v-toolbar>
                 <template>
                     <v-flex xs12 md16 offset-md1>
                         <v-card>
                         <v-card-text>
-                            <v-text-field required
-                            label="Nome"
-                            v-model="nome"
-                            ></v-text-field>
-                            <v-select
-                                label="Interests"
-                                multiple
-                                autocomplete
-                                chips
-                                v-model="teste"
-                                :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"></v-select>
-                            <v-checkbox v-bind:label="`Ativo: ${ativo.toString()}`" v-model="ativo" light></v-checkbox>
+                            <v-text-field label="Nome" v-model="nome" required></v-text-field>
                             <small>*campos obrigatório</small>
                         </v-card-text>
                         </v-card>
                     </v-flex>
-                    
                 </template>
-                <div class="text-xs-center">
                 <v-toolbar class="indigo" dark><v-spacer></v-spacer>
                     <v-toolbar-title>
                         <v-btn flat dark v-if="formValido()" @click.native="$emit('atualizar'); saveItem()">
@@ -40,10 +51,11 @@
                         </v-btn>
                     </v-toolbar-title>
                 </v-toolbar>
-                </div>
-            </div>
-        </div>
-    </transition>
+                <p>{{$data}} </p>
+      </v-card>
+    </v-dialog>
+  </v-layout>
+                
 <!-- app -->
 </template>
 
@@ -56,8 +68,10 @@ export default {
     data () {
         return {
             errors: [],
-            title: 'categoria',
-            nome: '', ativo: 'true',
+            title: 'ordem',
+            dialog: true,
+            nome: '',
+            teste:''
         }
     },
     mounted: function(){
@@ -81,15 +95,14 @@ export default {
         saveItem: function(){
             const data = {
                 'type': this.title,
-                'nome': this.nome,
-                'ativo': this.ativo
+                'nome': this.nome
             }
             this.$store.state.create(data)
             this.nome = ''
             this.ativo = 'true'
         },
         ehVazia () {
-            if(this.nome.length == 0 || this.ativo == true){
+            if(this.nome.length == 0){
                 return true
             }
             return false

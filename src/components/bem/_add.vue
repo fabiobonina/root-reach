@@ -1,8 +1,8 @@
 <template>
 <!-- template for the modal component -->
-    <transition name="modal">
-        <div class="modal">
-            <div class="modalContainer">
+<v-layout row justify-center>
+    <v-dialog v-model="dialog" persistent width="600px">
+
                 <v-toolbar class="indigo" dark>
                     <v-btn dark icon @click.native="$emit('close')">
                         <v-icon>arrow_back</v-icon>
@@ -54,9 +54,9 @@
                     </v-toolbar-title>
                 </v-toolbar>
                 <pre>{{ $data }}</pre>
-            </div>
-        </div>
-    </transition>
+
+    </v-dialog>
+  </v-layout>
 <!-- app -->
 </template>
 
@@ -70,6 +70,7 @@ export default {
         return {
             errors: [],
             title: 'localidade',
+            dialog: true,
             cliente: this.data,
             nome: '', tipo: '', regional: '', municipio: '', uf: '', ativo: '', cadastro: '',
             states: ['Capitação','Elevatoria','ETA','ETE','Industria','Poço','Outro']

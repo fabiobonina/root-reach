@@ -97,7 +97,6 @@ state.findLocalidades = () => {
     _.map(localidades.rows, (localidade) => localidade.doc)
   )
 }
-
 state.recaregarLocalidades = (obj, prop) => {
   state.findLocalidades().then(localidades => {
     obj[prop] = _.map(localidades, (localidade) => localidade)
@@ -158,7 +157,6 @@ state.findGrupos = () => {
     _.map(grupos.rows, (grupo) => grupo.doc)
   )
 }
-
 state.recaregarGrupos = (obj, prop) => {
   state.findGrupos().then(grupos => {
     obj[prop] = _.map(grupos, (grupo) => grupo)
@@ -167,7 +165,6 @@ state.recaregarGrupos = (obj, prop) => {
     db.sync(remotedb)
   }
 }
-
 state.findGrupoById = (id) => {
     return db.get(id).then(function (doc) {
       console.log(doc);
@@ -177,6 +174,34 @@ state.findGrupoById = (id) => {
   })
 }
 //</-grupos--->
+//<-ordens--->
+state.findOrdens = () => {
+  function map (doc, emit) {
+    if (doc.type === 'ordem') {
+      emit(doc.createdAt)
+    }
+  }
+  return db.query(map, {include_docs: true}).then(ordens =>
+    _.map(ordens.rows, (ordem) => ordem.doc)
+  )
+}
+state.recaregarOrdens = (obj, prop) => {
+  state.findOrdens().then(ordens => {
+    obj[prop] = _.map(ordens, (ordem) => ordem)
+  })
+  if (remotedb) {
+    db.sync(remotedb)
+  }
+}
+state.findOrdemById = (id) => {
+    return db.get(id).then(function (doc) {
+      console.log(doc);
+      return doc;
+    }).catch(function (err) {
+      console.log(err);
+  })
+}
+//</-ordens--->
 //<-fabricantes--->
 state.findFabricantes = () => {
   function map (doc, emit) {
