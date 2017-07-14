@@ -3,6 +3,7 @@
 <v-layout row justify-center>
     <v-dialog v-model="dialog" persistent width="600px">
       <v-card >
+<<<<<<< HEAD
         <v-toolbar class="indigo" dark>
             <v-btn dark icon @click.native="$emit('close')">
                 <v-icon>arrow_back</v-icon>
@@ -12,6 +13,14 @@
         
         <v-card-title class="indigo dark--text darken-1--text " dark>Select Country</v-card-title>
         <v-divider></v-divider>
+=======
+        <v-card-title class="indigo" dark>
+            <v-btn dark icon @click.native="$emit('close')">
+                    <v-icon>arrow_back</v-icon>
+            </v-btn>
+          <span class="headline" dark>Novo {{ title }}</span>
+        </v-card-title>
+>>>>>>> origin/master
         <v-card-text>
             <v-text-field label="Nome" v-model="nome" required></v-text-field>
             <small>*campos obrigatório</small>
@@ -21,12 +30,15 @@
           <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
           <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Save</v-btn>
         </v-card-actions>
+<<<<<<< HEAD
         <v-divider></v-divider>
         <v-card-actions class="indigo" dark>
         <v-spacer></v-spacer>
           <v-btn dark flat @click.native="dialog = false">Close</v-btn>
           <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Save</v-btn>
         </v-card-actions>
+=======
+>>>>>>> origin/master
         <v-toolbar class="indigo" dark>
                     <v-btn dark icon @click.native="$emit('close')">
                         <v-icon>arrow_back</v-icon>
