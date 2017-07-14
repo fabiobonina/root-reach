@@ -1,41 +1,52 @@
 <template>
 <!-- template for the modal component -->
-    <transition name="modal">
-        <div class="modal">
-            <div class="modalContainer">
-                <v-toolbar class="indigo" dark>
-                    <v-btn dark icon @click.native="$emit('close')">
-                        <v-icon>arrow_back</v-icon>
-                    </v-btn>
-                    <v-toolbar-title>Novo {{ title }}</v-toolbar-title>
-                </v-toolbar>
-                <template>
-                    <v-flex xs12 md16 offset-md1>
-                        <v-card>
-                        <v-card-text>
-                            <v-text-field required
-                            label="Nome"
-                            v-model="nome"
-                            ></v-text-field>
-                            <v-checkbox v-bind:label="`Ativo: ${ativo.toString()}`" v-model="ativo" dark></v-checkbox>
-                            <small>*campos obrigatório</small>
-                        </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    
-                </template>
-                <v-toolbar class="indigo" dark><v-spacer></v-spacer>
-                    <v-toolbar-title>
-                        <v-btn flat dark v-if="formValido()" @click.native="$emit('atualizar'); saveItem()">
-                            <span>Salva</span>
-                            <v-icon dark>save</v-icon>
-                        </v-btn>
-                    </v-toolbar-title>
-                </v-toolbar>
+    <v-dialog v-model="dialog" persistent width="550px">
+        <v-toolbar class="indigo" dark>
+            <v-btn dark icon @click.native="$emit('close')">
+                <v-icon>arrow_back</v-icon>
+            </v-btn>
+            <v-toolbar-title>Novo {{ title }}</v-toolbar-title>
+        </v-toolbar>
+        <v-card>
+            <v-card-text>
+                <v-text-field label="Nome" v-model="nome" required ></v-text-field>
+                <v-select label="Estrutura" v-bind:items="states" v-model="estrutura" item-text="nome" item-value="nome" multiple autocomplete chips></v-select>
                 
-            </div>
-        </div>
-    </transition>
+                <small>*campos obrigatório</small>
+                <v-select label="Select" v-bind:items="states" v-model="e11" item-text="nome" item-value="nome" multiple chips max-height="auto" autocomplete>
+                    <template slot="selection" scope="data">
+                        <v-chip  close @input="data.parent.selectItem(data.item)" @click.native.stop class="chip--select-multi" :key="data.item">
+                        <v-avatar></v-avatar>
+                        {{ data.item.nome }}
+                        </v-chip>
+                    </template>
+                    <template slot="item" scope="data">
+                        <v-list-tile-avatar>
+                        <img />
+                        </v-list-tile-avatar>
+                        <v-list-tile-content>
+                        <v-list-tile-title v-html="data.item.nome"></v-list-tile-title>
+                        <v-list-tile-sub-title></v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </template>
+                </v-select>
+                <v-checkbox v-bind:label="`Ativo: ${ativo.toString()}`" v-model="ativo"></v-checkbox>
+
+
+
+
+                <p>{{ $data }}</p>
+            </v-card-text>
+        </v-card>
+        <v-toolbar class="indigo" dark><v-spacer></v-spacer>
+            <v-toolbar-title>
+                <v-btn flat dark v-if="formValido()" @click.native="$emit('atualizar'); saveItem()">
+                    <span>Salva</span>
+                    <v-icon dark>save</v-icon>
+                </v-btn>
+            </v-toolbar-title>
+        </v-toolbar>
+    </v-dialog>
 <!-- app -->
 </template>
 
@@ -50,11 +61,28 @@ export default {
             errors: [],
             title: 'grupo',
             nome: '',
+            estrutura: [],
+            states:'',
             ativo: 'true',
+            dialog: true,
+            e11: [],
+            people: [
+                { header: 'Group 1'},
+                { name: 'Sandra Adams', group: 'Group 1' },
+                { name: 'Ali Connors', group: 'Group 1' },
+                { name: 'Trevor Hansen', group: 'Group 1' },
+                { name: 'Tucker Smith', group: 'Group 1' },
+                { divider: true },
+                { header: 'Group 2'},
+                { name: 'Britta Holt', group: 'Group 2' },
+                { name: 'Jane Smith ', group: 'Group 2' },
+                { name: 'John Smith', group: 'Group 2' },
+                { name: 'Sandra Williams', group: 'Group 2' }
+            ]
         }
     },
     mounted: function(){
-        console.log("bonina");
+        this.$store.state.recaregarOrdens(this, 'states')
     },
     computed: {
         hasErrors () {

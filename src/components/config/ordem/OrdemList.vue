@@ -42,13 +42,12 @@
             </v-card>
           </v-flex>
         </v-layout>
-       
-        <div id="app">
-            <!-- use the modal component, pass in the prop -->
-            <modal-add @close="showModalAdd = false" @atualizar="itemModal" v-if="showModalAdd" :data="cliente"></modal-add>
-            <modal-edt @close="showModalEdt = false" @atualizar="itemModal" v-if="showModalEdt" :data="modalItem"></modal-edt>
-            <modal-del @close="showModalDel = false" @atualizar="itemModal" v-if="showModalDel" :data="modalItem"></modal-del>
-        </div>
+        <v-layout row justify-center>   
+          <!-- use the modal component, pass in the prop -->
+          <modal-add @close="showModalAdd = false" @atualizar="itemModal" v-if="showModalAdd"></modal-add>
+          <modal-edt @close="showModalEdt = false" @atualizar="itemModal" v-if="showModalEdt" :data="modalItem"></modal-edt>
+          <modal-del @close="showModalDel = false" @atualizar="itemModal" v-if="showModalDel" :data="modalItem"></modal-del>
+        </v-layout>
       </div>
     </v-container>
   </main>

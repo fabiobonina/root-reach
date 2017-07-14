@@ -1,35 +1,24 @@
 <template>
 <!-- template for the modal component -->
-    <transition name="modal">
-        <div class="modal">
-            <div class="modalContainer">
-                <v-toolbar class="red" dark>
-                    <v-btn dark icon @click.native="$emit('close')">
-                        <v-icon>arrow_back</v-icon>
-                    </v-btn>
-                    <v-toolbar-title>você tem certeza?</v-toolbar-title>
-                </v-toolbar>
-                <template>
-                    <v-flex xs12 md16 offset-md1>
-                        <v-card>
-                        <v-card-text>
-                            <h6>Você vai apagar:</h6>
-                            <h5>{{ modalItem.nome }}</h5>
-                        </v-card-text>
-                        </v-card>
-                    </v-flex>
-                </template>
-                <v-toolbar class="red" dark><v-spacer></v-spacer>
-                    <v-toolbar-title>
-                        <v-btn flat dark @click.native="$emit('atualizar'); deleteItem()">
-                            <span>Delete</span>
-                            <v-icon dark>delete</v-icon>
-                        </v-btn>
-                    </v-toolbar-title>
-                </v-toolbar>
-            </div>
-        </div>
-    </transition>
+    <v-dialog v-model="dialog" persistent width="550px">
+        <v-toolbar class="red" dark>
+            <v-btn dark icon @click.native="$emit('close')"><v-icon>arrow_back</v-icon></v-btn>
+            <v-toolbar-title>você tem certeza?</v-toolbar-title>
+        </v-toolbar>
+        <v-card>
+            <v-card-text>
+                <h6>Você vai apagar:</h6>
+                <h5>{{ modalItem.nome }}</h5>
+            </v-card-text>
+        </v-card>
+        <v-toolbar class="red" dark><v-spacer></v-spacer>
+            <v-toolbar-title>
+                <v-btn flat dark @click.native="$emit('atualizar'); deleteItem()">
+                    <span>Delete</span><v-icon dark>delete</v-icon>
+                </v-btn>
+            </v-toolbar-title>
+        </v-toolbar>
+    </v-dialog>
 <!-- app -->
 </template>
 
@@ -42,7 +31,8 @@ export default {
     data () {
         return {
             errors: [],
-            modalItem: this.data
+            modalItem: this.data,
+            dialog: true,
         }
     },
     computed: {

@@ -13,17 +13,8 @@
                     <v-flex xs12 md16 offset-md1>
                         <v-card>
                         <v-card-text>
-                            <v-text-field required
-                            label="Nome"
-                            v-model="nome"
-                            ></v-text-field>
-                            <v-select
-                                label="Interests"
-                                multiple
-                                autocomplete
-                                chips
-                                v-model="teste"
-                                :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"></v-select>
+                            <v-text-field label="Nome" v-model="nome" required></v-text-field>
+                            
                             <v-checkbox v-bind:label="`Ativo: ${ativo.toString()}`" v-model="ativo" light></v-checkbox>
                             <small>*campos obrigatório</small>
                         </v-card-text>
@@ -57,7 +48,8 @@ export default {
         return {
             errors: [],
             title: 'categoria',
-            nome: '', ativo: 'true',
+            nome: '',
+            ativo: 'true',
         }
     },
     mounted: function(){

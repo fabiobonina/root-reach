@@ -41,9 +41,6 @@
 <script>
 export default {
     //name: 'clientes',
-    props: {
-        data: {}
-    },
     data () {
         return {
             errors: [],

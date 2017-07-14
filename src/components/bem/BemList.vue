@@ -48,7 +48,7 @@ export default {
     components: { ModalAdd, ModalEdt, ModalDel },
     data () {
         return {
-            title: 'Localidades',
+            title: 'Bens',
             showModalAdd: false, showModalEdt: false, showModalDel: false,
             modalItem: {},
             cliente: '',
