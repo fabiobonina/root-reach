@@ -67,7 +67,7 @@ export default {
   },
   data: function () {
     return {
-      title: 'Categorias',
+      title: 'Segmentos',
       showModalAdd: false, showModalEdt: false, showModalDel: false,
       modalItem: {},
       filterKey: '',
@@ -89,14 +89,14 @@ export default {
     }
   },
   beforeCreate: function() {
-	    this.$store.state.recaregarCategorias(this, 'data')
+	    this.$store.state.recaregarSegmentos(this, 'data')
   },
   methods: {
     getAllUsers: function(){
-        this.$store.state.recaregarCategorias(this, 'data')
+        this.$store.state.recaregarSegmentos(this, 'data')
     },
     itemModal: function(){
-        this.$store.state.recaregarCategorias(this, 'data'),
+        this.$store.state.recaregarSegmentos(this, 'data'),
         this.showModalAdd = false,
         this.showModalEdt = false,
         this.showModalDel = false

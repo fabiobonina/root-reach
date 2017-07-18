@@ -49,7 +49,7 @@ export default {
     data () {
         return {
             errors: [],
-            title: 'categoria',
+            title: 'segmento',
             modalItem: this.data
         }
     },

@@ -141,20 +141,6 @@ export default {
 </script>
 
 <style scoped>
-.modal{
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-}
-.modalContainer{
-    width: 555px;
-    background: #FFFFFF;
-    margin: auto;
-    margin-top: 44px;
-}
 p.successMessage{
     background: #D8EFC2;
     color: #097133;

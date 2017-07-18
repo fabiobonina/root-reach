@@ -47,7 +47,7 @@ export default {
       return {
         text: 'Lorem ipsum dolor sit amet, consequat.',
         items: [
-              { item: '1', title: 'Categoria', router: 'categoria' },
+              { item: '1', title: 'Segmento', router: 'segmento' },
               { item: '2', title: 'Ordem', router: 'ordem' },
               { item: '3', title: 'Grupo', router: 'grupo' },
               { item: '4', title: 'Fabricante', router: 'fabricante' }

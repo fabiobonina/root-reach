@@ -7,7 +7,7 @@
                     <v-btn dark icon @click.native="$emit('atualizar')">
                         <v-icon>arrow_back</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Edtar {{ title }}</v-toolbar-title>
+                    <v-toolbar-title>Editar {{ title }}</v-toolbar-title>
                 </v-toolbar>
                 <template>
                     <v-flex xs12 md16 offset-md1>

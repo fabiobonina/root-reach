@@ -116,28 +116,28 @@ state.findLocalidadeById = (id) => {
   })
 }
 //<--Localidades-->
-//<-categorias--->
-state.findCategorias = () => {
+//<-segmentos--->
+state.findSegmentos = () => {
   function map (doc, emit) {
-    if (doc.type === 'categoria') {
+    if (doc.type === 'segmento') {
       emit(doc.createdAt)
     }
   }
-  return db.query(map, {include_docs: true}).then(categorias =>
-    _.map(categorias.rows, (categoria) => categoria.doc)
+  return db.query(map, {include_docs: true}).then(segmentos =>
+    _.map(segmentos.rows, (segmento) => segmento.doc)
   )
 }
 
-state.recaregarCategorias = (obj, prop) => {
-  state.findCategorias().then(categorias => {
-    obj[prop] = _.map(categorias, (categoria) => categoria)
+state.recaregarSegmentos = (obj, prop) => {
+  state.findSegmentos().then(segmentos => {
+    obj[prop] = _.map(segmentos, (segmento) => segmento)
   })
   if (remotedb) {
     db.sync(remotedb)
   }
 }
 
-state.findCategoriaById = (id) => {
+state.findSgmentoById = (id) => {
     return db.get(id).then(function (doc) {
       console.log(doc);
       return doc;
@@ -145,7 +145,7 @@ state.findCategoriaById = (id) => {
       console.log(err);
   })
 }
-//</-categorias--->
+//</-segmentos--->
 //<-grupos--->
 state.findGrupos = () => {
   function map (doc, emit) {

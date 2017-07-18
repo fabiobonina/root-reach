@@ -9,11 +9,9 @@
         </v-toolbar>
         <v-card>
             <v-card-text>
-                <v-text-field label="Nome" v-model="nome" required ></v-text-field>
-                <v-select label="Estrutura" v-bind:items="states" v-model="estrutura" item-text="nome" item-value="nome" multiple autocomplete chips></v-select>
+                <v-text-field label="Nome" v-model="nome" required ></v-text-field>               
                 
-                <small>*campos obrigatório</small>
-                <v-select label="Select" v-bind:items="states" v-model="e11" item-text="nome" item-value="nome" multiple chips max-height="auto" autocomplete>
+                <v-select label="Select" v-bind:items="states" v-model="e11" item-text="name" item-value="nasme" multiple chips max-height="auto" autocomplete>
                     <template slot="selection" scope="data">
                         <v-chip  close @input="data.parent.selectItem(data.item)" @click.native.stop class="chip--select-multi" :key="data.item">
                         <v-avatar></v-avatar>
@@ -21,9 +19,6 @@
                         </v-chip>
                     </template>
                     <template slot="item" scope="data">
-                        <v-list-tile-avatar>
-                        <img />
-                        </v-list-tile-avatar>
                         <v-list-tile-content>
                         <v-list-tile-title v-html="data.item.nome"></v-list-tile-title>
                         <v-list-tile-sub-title></v-list-tile-sub-title>
@@ -31,10 +26,7 @@
                     </template>
                 </v-select>
                 <v-checkbox v-bind:label="`Ativo: ${ativo.toString()}`" v-model="ativo"></v-checkbox>
-
-
-
-
+                <small>*campos obrigatório</small>
                 <p>{{ $data }}</p>
             </v-card-text>
         </v-card>
@@ -62,27 +54,14 @@ export default {
             title: 'grupo',
             nome: '',
             estrutura: [],
-            states:'',
+            states: this.data,
             ativo: 'true',
             dialog: true,
-            e11: [],
-            people: [
-                { header: 'Group 1'},
-                { name: 'Sandra Adams', group: 'Group 1' },
-                { name: 'Ali Connors', group: 'Group 1' },
-                { name: 'Trevor Hansen', group: 'Group 1' },
-                { name: 'Tucker Smith', group: 'Group 1' },
-                { divider: true },
-                { header: 'Group 2'},
-                { name: 'Britta Holt', group: 'Group 2' },
-                { name: 'Jane Smith ', group: 'Group 2' },
-                { name: 'John Smith', group: 'Group 2' },
-                { name: 'Sandra Williams', group: 'Group 2' }
-            ]
+            e11: []
         }
     },
-    mounted: function(){
-        this.$store.state.recaregarOrdens(this, 'states')
+    beforeCreate: function(){
+        
     },
     computed: {
         hasErrors () {
@@ -103,6 +82,7 @@ export default {
             const data = {
                 'type': this.title,
                 'nome': this.nome,
+                'segmentos': this.e11,
                 'ativo': this.ativo
             }
             this.$store.state.create(data)
