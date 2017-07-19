@@ -11,7 +11,7 @@
             <v-card-text>
                 <v-text-field label="Nome" v-model="nome" required ></v-text-field>               
                 
-                <v-select label="Select" v-bind:items="states" v-model="e11" item-text="name" item-value="nasme" multiple chips max-height="auto" autocomplete>
+                <v-select label="Select" v-bind:items="states" v-model="segmentos" item-text="name" item-value="nasme" multiple chips max-height="auto" autocomplete>
                     <template slot="selection" scope="data">
                         <v-chip  close @input="data.parent.selectItem(data.item)" @click.native.stop class="chip--select-multi" :key="data.item">
                         <v-avatar></v-avatar>
@@ -57,7 +57,7 @@ export default {
             states: this.data,
             ativo: 'true',
             dialog: true,
-            e11: []
+            segmentos: []
         }
     },
     beforeCreate: function(){
@@ -82,7 +82,7 @@ export default {
             const data = {
                 'type': this.title,
                 'nome': this.nome,
-                'segmentos': this.e11,
+                'segmentos': this.segmentos,
                 'ativo': this.ativo
             }
             this.$store.state.create(data)
