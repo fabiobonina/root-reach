@@ -10,16 +10,14 @@
         <v-card>
             <v-card-text>
                 <v-text-field required label="Nome" v-model="modalItem.nome"></v-text-field>
-                <v-select label="Select" v-bind:items="states" v-bind:itens="modalItem.segmentos" v-model="modalItem.segmentos" item-text="name" item-value="name" multiple chips max-height="auto" autocomplete>
-                    <template slot="itens" scope="props">
-                        <v-chip  close @input="props.parent.selectItem(props.item)" @click.native.stop class="chip--select-multi" :key="props.item">
-                        <v-avatar></v-avatar>
-                        {{ props.item.nome }}
+                <v-select label="Select" v-bind:items="states" v-bind:dados="modalItem.segmentos" v-model="modalItem.segmentos" item-text="name" item-value="name" multiple chips max-height="auto" autocomplete>
+                    <template slot="dados" scope="data">
+                        <v-chip  close @input="data.parent.selectItem(data.item)" @click.native.stop class="chip--select-multi" :key="data.item">
+                        {{ data.item.nome }}
                         </v-chip>
                     </template>
                     <template slot="selection" scope="data">
                         <v-chip  close @input="data.parent.selectItem(data.item)" @click.native.stop class="chip--select-multi" :key="data.item">
-                        <v-avatar></v-avatar>
                         {{ data.item.nome }}
                         </v-chip>
                     </template>
