@@ -11,10 +11,22 @@
             <v-card-text>
                 <v-text-field label="Nome" v-model="nome" required ></v-text-field>               
                 
-                <v-select label="Select" v-bind:items="states" v-model="segmentos" item-text="name" item-value="nasme" multiple chips max-height="auto" autocomplete>
+                <v-select label="Ordens" v-bind:items="ordens" v-model="_ordens" item-text="nome" item-value="_id" multiple chips max-height="auto" autocomplete>
                     <template slot="selection" scope="data">
                         <v-chip  close @input="data.parent.selectItem(data.item)" @click.native.stop class="chip--select-multi" :key="data.item">
-                        <v-avatar></v-avatar>
+                        {{ data.item.nome }}
+                        </v-chip>
+                    </template>
+                    <template slot="item" scope="data">
+                        <v-list-tile-content>
+                        <v-list-tile-title v-html="data.item.nome"></v-list-tile-title>
+                        <v-list-tile-sub-title></v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </template>
+                </v-select>
+                <v-select label="Seguimentos" v-bind:items="segmentos" v-model="_segmentos" item-text="nome" item-value="_id" multiple chips max-height="auto" autocomplete>
+                    <template slot="selection" scope="data">
+                        <v-chip  close @input="data.parent.selectItem(data.item)" @click.native.stop class="chip--select-multi" :key="data.item">
                         {{ data.item.nome }}
                         </v-chip>
                     </template>
@@ -46,7 +58,7 @@
 export default {
     //name: 'clientes',
     props: {
-        data: {}
+
     },
     data () {
         return {
@@ -54,14 +66,17 @@ export default {
             title: 'grupo',
             nome: '',
             estrutura: [],
-            states: this.data,
-            ativo: 'true',
-            dialog: true,
-            segmentos: []
+            ativo: true,
+            ordens: [],
+            _ordens: [],
+            segmentos: [],
+            _segmentos: [],
+            dialog: true
         }
     },
     beforeCreate: function(){
-        
+        this.$store.state.recaregarSegmentos(this, 'segmentos'),
+        this.$store.state.recaregarOrdens(this, 'ordens')
     },
     computed: {
         hasErrors () {

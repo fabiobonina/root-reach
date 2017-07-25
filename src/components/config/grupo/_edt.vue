@@ -10,12 +10,7 @@
         <v-card>
             <v-card-text>
                 <v-text-field required label="Nome" v-model="modalItem.nome"></v-text-field>
-                <v-select label="Select" v-bind:items="states" v-bind:dados="modalItem.segmentos" v-model="modalItem.segmentos" item-text="name" item-value="name" multiple chips max-height="auto" autocomplete>
-                    <template slot="dados" scope="data">
-                        <v-chip  close @input="data.parent.selectItem(data.item)" @click.native.stop class="chip--select-multi" :key="data.item">
-                        {{ data.item.nome }}
-                        </v-chip>
-                    </template>
+                <v-select label="Seguimentos" v-bind:items="segmentos" v-model="modalItem.segmentos" item-text="nome" item-value="_id" multiple chips max-height="auto" autocomplete>
                     <template slot="selection" scope="data">
                         <v-chip  close @input="data.parent.selectItem(data.item)" @click.native.stop class="chip--select-multi" :key="data.item">
                         {{ data.item.nome }}
@@ -28,7 +23,20 @@
                         </v-list-tile-content>
                     </template>
                 </v-select>
-                <v-checkbox v-bind:label="`Ativo: ${modalItem.ativo.toString()}`" v-model="modalItem.ativo" dark></v-checkbox>
+                <v-select label="Ordens" v-bind:items="ordens" v-model="modalItem.ordens" item-text="nome" item-value="_id" multiple chips max-height="auto" autocomplete>
+                    <template slot="selection" scope="data">
+                        <v-chip  close @input="data.parent.selectItem(data.item)" @click.native.stop class="chip--select-multi" :key="data.item">
+                        {{ data.item.nome }}
+                        </v-chip>
+                    </template>
+                    <template slot="item" scope="data">
+                        <v-list-tile-content>
+                        <v-list-tile-title v-html="data.item.nome"></v-list-tile-title>
+                        <v-list-tile-sub-title></v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </template>
+                </v-select>
+                <v-checkbox v-bind:label="`Ativo: ${modalItem.ativo}`" v-model="modalItem.ativo"></v-checkbox>
                 <small>*campos obrigatório</small>
                 <p>{{$data}}</p>
             </v-card-text>
@@ -50,21 +58,23 @@
 export default {
     //name: 'clientes',
     props: {
-        data: {},
-        dados: {}
+        data: {}
     },
     data () {
         return {
             errors: [],
             title: 'grupo',
             modalItem: this.data,
-            states: this.dados,
-            dialog: true,
-            segmentos: []
+            ordens: [],
+            segmentos: [],
+            dialog: true
         }
     },
     mounted: function(){
-        console.log("bonina");
+    },
+    beforeCreate: function(){
+        this.$store.state.recaregarSegmentos(this, 'segmentos'),
+        this.$store.state.recaregarOrdens(this, 'ordens')
     },
     computed: {
         hasErrors () {
