@@ -1,62 +1,56 @@
 <template>
 <!-- template for the modal component -->
-<v-layout row justify-center>
-    <v-dialog v-model="dialog" persistent width="600px">
-
-                <v-toolbar class="indigo" dark>
-                    <v-btn dark icon @click.native="$emit('close')">
-                        <v-icon>arrow_back</v-icon>
-                    </v-btn>
-                    <v-toolbar-title>Novo {{ title }}</v-toolbar-title>
-                </v-toolbar>
-                <template>
-                    <v-flex xs12 md16 offset-md1>
-                        <v-card>
-                        <v-card-text>
-                            <v-flex xs6>
-                                <v-select v-bind:items="states" required single-line auto
-                                v-model="tipo"
-                                label="Tipo"
-                                ></v-select>
-                            </v-flex>
-                            <v-text-field required
-                            label="Nome"
-                            v-model="nome"
-                            ></v-text-field>
-                            <v-text-field
-                            label="Regional"
-                            v-model="regional"
-                            ></v-text-field>
-                            <v-text-field required
-                            label="municipio"
-                            v-model="municipio"
-                            ></v-text-field>
-                            <v-text-field required hint="Exemplo: PE"
-                            label="UF"
-                            v-model="uf"
-                            ></v-text-field>
-                            <v-text-field
-                            label="Ativo"
-                            v-model="ativo"
-                            ></v-text-field>
-                            <small>*campos obrigatório</small>
-                        </v-card-text>
-                        </v-card>
-                    </v-flex>
-                    
-                </template>
-                <v-toolbar class="indigo" dark>
-                    <v-toolbar-title>
-                        <v-btn flat dark v-if="formValido()" @click.native="$emit('atualizar'); saveItem()">
-                            <span>Salva</span>
-                            <v-icon dark>save</v-icon>
-                        </v-btn>
-                    </v-toolbar-title>
-                </v-toolbar>
-                <pre>{{ $data }}</pre>
-
+    <v-dialog v-model="dialog" persistent width="550px">
+        <v-toolbar class="indigo" dark>
+            <v-btn dark icon @click.native="$emit('close')">
+                <v-icon>arrow_back</v-icon>
+            </v-btn>
+            <v-toolbar-title>Novo {{ title }}</v-toolbar-title>
+        </v-toolbar>
+        <v-card>
+            <v-card-text>
+                <v-text-field label="Nome" v-model="nome" required ></v-text-field>               
+                
+                <v-select label="Ordens" v-bind:items="ordens" v-model="_ordens" item-text="nome" item-value="_id" multiple chips max-height="auto" autocomplete>
+                    <template slot="selection" scope="data">
+                        <v-chip  close @input="data.parent.selectItem(data.item)" @click.native.stop class="chip--select-multi" :key="data.item">
+                        {{ data.item.nome }}
+                        </v-chip>
+                    </template>
+                    <template slot="item" scope="data">
+                        <v-list-tile-content>
+                        <v-list-tile-title v-html="data.item.nome"></v-list-tile-title>
+                        <v-list-tile-sub-title></v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </template>
+                </v-select>
+                <v-select label="Seguimentos" v-bind:items="segmentos" v-model="_segmentos" item-text="nome" item-value="_id" multiple chips max-height="auto" autocomplete>
+                    <template slot="selection" scope="data">
+                        <v-chip  close @input="data.parent.selectItem(data.item)" @click.native.stop class="chip--select-multi" :key="data.item">
+                        {{ data.item.nome }}
+                        </v-chip>
+                    </template>
+                    <template slot="item" scope="data">
+                        <v-list-tile-content>
+                        <v-list-tile-title v-html="data.item.nome"></v-list-tile-title>
+                        <v-list-tile-sub-title></v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </template>
+                </v-select>
+                <v-checkbox v-bind:label="`Ativo: ${ativo.toString()}`" v-model="ativo"></v-checkbox>
+                <small>*campos obrigatório</small>
+                <p>{{ $data }}</p>
+            </v-card-text>
+        </v-card>
+        <v-toolbar class="indigo" dark><v-spacer></v-spacer>
+            <v-toolbar-title>
+                <v-btn flat dark v-if="formValido()" @click.native="$emit('atualizar'); saveItem()">
+                    <span>Salva</span>
+                    <v-icon dark>save</v-icon>
+                </v-btn>
+            </v-toolbar-title>
+        </v-toolbar>
     </v-dialog>
-  </v-layout>
 <!-- app -->
 </template>
 
@@ -64,20 +58,25 @@
 export default {
     //name: 'clientes',
     props: {
-        data: {}
+
     },
     data () {
         return {
             errors: [],
-            title: 'localidade',
-            dialog: true,
-            cliente: this.data,
-            nome: '', tipo: '', regional: '', municipio: '', uf: '', ativo: '', cadastro: '',
-            states: ['Capitação','Elevatoria','ETA','ETE','Industria','Poço','Outro']
+            title: 'grupo',
+            nome: '',
+            estrutura: [],
+            ativo: true,
+            ordens: [],
+            _ordens: [],
+            segmentos: [],
+            _segmentos: [],
+            dialog: true
         }
     },
-    mounted: function(){
-        console.log("bonina");
+    beforeCreate: function(){
+        this.$store.state.recaregarSegmentos(this, 'segmentos'),
+        this.$store.state.recaregarOrdens(this, 'ordens')
     },
     computed: {
         hasErrors () {
@@ -86,48 +85,27 @@ export default {
     },
     watch: {
         // sempre que a pergunta mudar, essa função será executada
-        tipo: function (data) {
-            this.formValido();
-        },
         nome: function (data) {
             this.formValido();
         },
-        municipio: function (data) {
-            this.formValido();
-        },
-        uf: function (data) {
+        ativo: function (data) {
             this.formValido();
         }
     },
     methods: {
         saveItem: function(){
             const data = {
-                'type': 'localidade',
-                'clienteId': this.cliente._id,
-                'clienteNome': this.cliente.fantasia,
+                'type': this.title,
                 'nome': this.nome,
-                'tipo': this.tipo,
-                'municipio': this.municipio,
-                'uf': this.uf,
-                'ativo': this.ativo,
-                'cadastro': new Date().toJSON()
+                'segmentos': this.segmentos,
+                'ativo': this.ativo
             }
-            this.$store.state.create(data).then(results => {
-                this.$store.state.findLocalidadesByClienteId(cliente._id).then(localidades => {
-                    this.localidades = localidades
-                })
-                 //this.$store.state.recaregarlocalidades(this, 'localidades')
-            })
-            this.tipo = ''
+            this.$store.state.create(data)
             this.nome = ''
-            this.regional = ''
-            this.municipio = ''
-            this.uf = ''
-            this.ativo = ''
-
+            this.ativo = 'true'
         },
         ehVazia () {
-            if(this.tipo.length == 0 || this.nome.length == 0 || this.municipio.length == 0 || this.uf.length == 0){
+            if(this.nome.length == 0 || this.ativo == true){
                 return true
             }
             return false
@@ -155,6 +133,6 @@ export default {
     width: 555px;
     background: #FFFFFF;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 70px;
 }
 </style>
